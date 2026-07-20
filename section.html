@@ -62,12 +62,23 @@
         card.innerHTML = `
           <h3></h3>
           <div class="price"></div>
-          <p></p>
+          <div class="desc"></div>
           <button ${hasUser ? '' : 'disabled'}>${hasUser ? 'Buy' : 'Enter username first'}</button>
         `;
         card.querySelector('h3').textContent = p.name;
         card.querySelector('.price').textContent = p.price_display;
-        card.querySelector('p').textContent = p.description;
+        const descEl = card.querySelector('.desc');
+        if (Array.isArray(p.description)) {
+          const ul = document.createElement('ul');
+          for (const item of p.description) {
+            const li = document.createElement('li');
+            li.textContent = item;
+            ul.appendChild(li);
+          }
+          descEl.appendChild(ul);
+        } else {
+          descEl.textContent = p.description;
+        }
         card.querySelector('button').addEventListener('click', () => buy(p));
         grid.appendChild(card);
       }

@@ -41,14 +41,27 @@
         {
           "id": "supporter",
           "name": "Supporter",
-          "description": "Supporter Kit, in-game prefix, Discord role, /trim, /rename, and a 1.25x Cash Multiplier.",
+          "description": [
+            "Supporter Kit",
+            "Supporter Prefix In-game",
+            "Supporter Discord Role",
+            "/trim",
+            "/rename",
+            "1.25x Cash Multiplier"
+          ],
           "price_display": "$2.99",
           "payment_link": "https://buy.stripe.com/test_REPLACE_ME_SUPPORTER"
         },
         {
           "id": "unstable",
-          "name": "Unstable Rank (Custom)",
-          "description": "Everything from Supporter plus Unstable Kit, Unstable prefix, Discord role, and a custom changeable tag.",
+          "name": "Unstable Rank",
+          "description": [
+            "All features from Supporter",
+            "Unstable Kit",
+            "Unstable Prefix In-game",
+            "Unstable Discord Role",
+            "Custom Changeable Tag"
+          ],
           "price_display": "$4.99",
           "payment_link": "https://buy.stripe.com/test_REPLACE_ME_UNSTABLE"
         }

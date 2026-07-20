@@ -344,6 +344,16 @@ header p {
 .card h3 { margin: 0 0 6px; font-size: 20px; }
 .card .price { color: var(--accent); font-weight: 600; font-size: 22px; margin-bottom: 10px; }
 .card p { margin: 0 0 20px; color: var(--muted); font-size: 14px; flex: 1; }
+.card .desc { margin: 0 0 20px; color: var(--muted); font-size: 14px; flex: 1; }
+.card .desc ul {
+  margin: 0;
+  padding: 0 0 0 18px;
+  list-style: disc;
+}
+.card .desc ul li {
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
 .card button {
   background: var(--accent);
   color: white;
