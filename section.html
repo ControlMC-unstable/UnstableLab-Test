@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Unstable Lab Store</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="style.css?v=6">
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="index.html">← All sections</a>
+
+    <div class="section-header">
+      <h1 id="section-title">Loading…</h1>
+      <p id="section-description"></p>
+    </div>
+
+    <div id="error" class="error" hidden></div>
+
+    <div class="username-card">
+      <div class="head" id="head" aria-hidden="true">?</div>
+      <label for="username">Minecraft username:</label>
+      <input id="username" type="text" placeholder="e.g. Steve" autocomplete="off" spellcheck="false">
+      <span class="status" id="status">Enter your username to enable purchases.</span>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <footer>
+      Payments handled securely by Stripe. Your purchase is delivered in-game within about a minute of payment.
+      <div class="footer-links">
+        <a href="terms.html">Terms of Service</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="shop.js?v=6"></script>
+  <script>
+    function currentSectionId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+      const sectionId = currentSectionId();
+      const section = (STATE.data.sections || []).find(s => s.id === sectionId);
+      if (!section) {
+        document.getElementById('section-title').textContent = 'Section not found';
+        document.getElementById('section-description').textContent =
+          'Head back to the store and pick a category.';
+        return;
+      }
+
+      document.title = `${section.name} — ${STATE.data.server_name || 'Store'}`;
+      document.getElementById('section-title').textContent = section.name;
+      document.getElementById('section-description').textContent = section.description || '';
+
+      const hasUser = isValidUsername(STATE.username);
+      for (const p of (section.products || [])) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h3></h3>
+          <div class="price"></div>
+          <div class="desc"></div>
+          <button ${hasUser ? '' : 'disabled'}>${hasUser ? 'Buy' : 'Enter username first'}</button>
+        `;
+        card.querySelector('h3').textContent = p.name;
+        card.querySelector('.price').textContent = p.price_display;
+        const descEl = card.querySelector('.desc');
+        if (Array.isArray(p.description)) {
+          const ul = document.createElement('ul');
+          for (const item of p.description) {
+            const li = document.createElement('li');
+            li.textContent = item;
+            ul.appendChild(li);
+          }
+          descEl.appendChild(ul);
+        } else {
+          descEl.textContent = p.description;
+        }
+        card.querySelector('button').addEventListener('click', () => buy(p));
+        grid.appendChild(card);
+      }
+    }
+
+    loadData().then(data => {
+      if (data) renderProducts();
+    });
+  </script>
+</body>
+</html>
