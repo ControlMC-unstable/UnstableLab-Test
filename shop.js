@@ -5,40 +5,61 @@ const STATE = { username: '', data: null };
 // ===== Server IP top bar =====
 // Injected on every page so both index.html and section.html get it.
 const SERVER_IP = 'PLAY.UNSTABLELAB.XYZ';
+const DISCORD_URL = 'https://discord.gg/M8SczA8yWJ';
+
+// Copy text to clipboard, with a fallback for browsers that don't have
+// the async clipboard API (old browsers / non-HTTPS pages).
+async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (_) {
+    const t = document.createElement('textarea');
+    t.value = text;
+    document.body.appendChild(t);
+    t.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (_) {}
+    document.body.removeChild(t);
+    return ok;
+  }
+}
+
+// Attach a click handler that copies `text` and shows a brief "Copied!" state.
+function wireCopyButton(btn, text) {
+  btn.addEventListener('click', async () => {
+    await copyToClipboard(text);
+    const original = btn.dataset.original || btn.textContent;
+    btn.dataset.original = original;
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.classList.remove('copied');
+    }, 1500);
+  });
+}
 
 (function installIpBar() {
   const bar = document.createElement('div');
   bar.className = 'ip-bar';
   bar.innerHTML = `
-    <span class="ip-label">Play now on</span>
-    <span class="ip-address"></span>
-    <button class="copy-btn" type="button">Copy</button>
+    <div class="ip-bar-item">
+      <span class="ip-label">Play now on</span>
+      <span class="ip-address"></span>
+      <button class="copy-btn" type="button" data-copy="ip">Copy</button>
+    </div>
+    <div class="ip-bar-divider" aria-hidden="true"></div>
+    <div class="ip-bar-item">
+      <span class="ip-label">Discord</span>
+      <a class="discord-link" href="${DISCORD_URL}" target="_blank" rel="noopener">discord.gg/M8SczA8yWJ</a>
+      <button class="copy-btn" type="button" data-copy="discord">Copy</button>
+    </div>
   `;
   bar.querySelector('.ip-address').textContent = SERVER_IP;
 
-  const btn = bar.querySelector('.copy-btn');
-  btn.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(SERVER_IP);
-      btn.textContent = 'Copied!';
-      btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = 'Copy';
-        btn.classList.remove('copied');
-      }, 1500);
-    } catch (_) {
-      // Fallback for old browsers / non-HTTPS pages
-      const t = document.createElement('textarea');
-      t.value = SERVER_IP;
-      document.body.appendChild(t);
-      t.select();
-      try { document.execCommand('copy'); } catch (_) {}
-      document.body.removeChild(t);
-      btn.textContent = 'Copied!';
-      btn.classList.add('copied');
-      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
-    }
-  });
+  wireCopyButton(bar.querySelector('[data-copy="ip"]'), SERVER_IP);
+  wireCopyButton(bar.querySelector('[data-copy="discord"]'), DISCORD_URL);
 
   document.body.insertBefore(bar, document.body.firstChild);
 })();

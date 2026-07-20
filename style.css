@@ -115,7 +115,7 @@ body:hover .spotlight { opacity: 1; }
   top: 0;
   z-index: 50;
   display: flex;
-  gap: 14px;
+  gap: 20px;
   align-items: center;
   justify-content: center;
   padding: 12px 20px;
@@ -125,6 +125,17 @@ body:hover .spotlight { opacity: 1; }
   -webkit-backdrop-filter: blur(14px);
   flex-wrap: wrap;
   font-size: 15px;
+}
+.ip-bar-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.ip-bar-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border);
 }
 .ip-bar .ip-label {
   color: var(--muted);
@@ -142,6 +153,18 @@ body:hover .spotlight { opacity: 1; }
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+.ip-bar .discord-link {
+  font-family: 'SF Mono', Monaco, Consolas, 'Courier New', monospace;
+  color: #b4a5ff;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.ip-bar .discord-link:hover { color: #ffffff; }
+@media (max-width: 640px) {
+  .ip-bar-divider { display: none; }
 }
 .ip-bar .copy-btn {
   background: var(--panel-2);
@@ -387,6 +410,67 @@ footer {
   margin-top: 48px;
   color: var(--muted);
   font-size: 13px;
+}
+footer .footer-links {
+  margin-top: 10px;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+footer .footer-links a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel);
+  backdrop-filter: blur(8px);
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+footer .footer-links a:hover {
+  color: white;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ===== Terms of Service page ===== */
+.terms {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px 36px;
+  backdrop-filter: blur(12px);
+  color: var(--text);
+  line-height: 1.65;
+}
+.terms-item {
+  margin-bottom: 24px;
+}
+.terms-item:last-of-type {
+  margin-bottom: 16px;
+}
+.terms-item h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+}
+.terms-item p {
+  margin: 0 0 10px;
+  color: var(--text);
+  font-size: 15px;
+}
+.terms-item p:last-child { margin-bottom: 0; }
+.terms-ack {
+  margin: 24px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 14px;
+  font-style: italic;
+  text-align: center;
 }
 
 .error {
