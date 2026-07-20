@@ -5,14 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Unstable Lab Store</title>
   <link rel="icon" type="image/png" href="logo.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
   <div class="wrap">
     <a class="back" href="index.html">← All sections</a>
 
     <div class="section-header">
-      <div class="icon" id="section-icon"></div>
       <h1 id="section-title">Loading…</h1>
       <p id="section-description"></p>
     </div>
@@ -55,9 +54,6 @@
       document.title = `${section.name} — ${STATE.data.server_name || 'Store'}`;
       document.getElementById('section-title').textContent = section.name;
       document.getElementById('section-description').textContent = section.description || '';
-
-      const iconEl = document.getElementById('section-icon');
-      iconEl.textContent = section.icon || '📦';
 
       const hasUser = isValidUsername(STATE.username);
       for (const p of (section.products || [])) {

@@ -39,25 +39,18 @@
       "description": "Permanent perks and cosmetic titles.",
       "products": [
         {
-          "id": "vip",
-          "name": "VIP",
-          "description": "Colored username, /fly in the lobby, VIP kit.",
-          "price_display": "$5",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_VIP"
+          "id": "supporter",
+          "name": "Supporter",
+          "description": "Supporter Kit, in-game prefix, Discord role, /trim, /rename, and a 1.25x Cash Multiplier.",
+          "price_display": "$2.99",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_SUPPORTER"
         },
         {
-          "id": "mvp",
-          "name": "MVP",
-          "description": "Everything in VIP plus a custom prefix and /nick.",
-          "price_display": "$12",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_MVP"
-        },
-        {
-          "id": "elite",
-          "name": "ELITE",
-          "description": "Top-tier rank. All perks, plus /feed and /heal.",
-          "price_display": "$25",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_ELITE"
+          "id": "unstable",
+          "name": "Unstable Rank (Custom)",
+          "description": "Everything from Supporter plus Unstable Kit, Unstable prefix, Discord role, and a custom changeable tag.",
+          "price_display": "$4.99",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_UNSTABLE"
         }
       ]
     },

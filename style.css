@@ -306,6 +306,14 @@ header p {
   line-height: 1;
   margin-bottom: 16px;
   filter: drop-shadow(0 8px 24px rgba(0,0,0,0.6));
+  /* Explicit resets to prevent black-box rendering */
+  width: auto !important;
+  height: auto !important;
+  background: none !important;
+  border: none !important;
+  border-radius: 0;
+  overflow: visible;
+  display: block;
 }
 .section-card h2 { margin: 0 0 6px; font-size: 28px; font-weight: 700; }
 .section-card p { margin: 0; color: var(--muted); font-size: 14px; }
@@ -352,14 +360,17 @@ header p {
 
 /* ===== Section page header ===== */
 .section-header { margin-bottom: 24px; text-align: center; }
-.section-header .icon {
-  font-size: 96px;
-  line-height: 1;
-  margin: 0 0 12px;
-  filter: drop-shadow(0 6px 20px rgba(0,0,0,0.5));
+.section-header h1 {
+  margin: 0 0 8px;
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(180deg, #ffffff 0%, #c4b5fd 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
-.section-header h1 { margin: 0 0 6px; font-size: 40px; font-weight: 800; }
-.section-header p { margin: 0; color: var(--muted); }
+.section-header p { margin: 0; color: var(--muted); font-size: 17px; }
 
 footer {
   text-align: center;
