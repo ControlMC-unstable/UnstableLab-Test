@@ -10,25 +10,18 @@
       "description": "In-game currency packs.",
       "products": [
         {
-          "id": "money-small",
-          "name": "$10,000 in-game",
-          "description": "A starter stack of coins to get you rolling.",
-          "price_display": "$2",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_MONEY_S"
+          "id": "money-5k",
+          "name": "$5,000",
+          "description": "",
+          "price_display": "$1.99",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_MONEY_5K"
         },
         {
-          "id": "money-medium",
-          "name": "$100,000 in-game",
-          "description": "Enough for a shop, some plots, and gear.",
-          "price_display": "$8",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_MONEY_M"
-        },
-        {
-          "id": "money-large",
-          "name": "$1,000,000 in-game",
-          "description": "The tycoon pack. Build an empire.",
-          "price_display": "$25",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_MONEY_L"
+          "id": "money-10k",
+          "name": "$10,000",
+          "description": "",
+          "price_display": "$3.99",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_MONEY_10K"
         }
       ]
     },
@@ -74,25 +67,46 @@
       "description": "Open crates for random loot.",
       "products": [
         {
-          "id": "key-common",
-          "name": "5x Common Keys",
-          "description": "Basic loot pool. Great for stacking up.",
-          "price_display": "$3",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_KEY_COMMON"
+          "id": "key-fireworks-1",
+          "name": "1x Fireworks Crate Key",
+          "description": "",
+          "price_display": "$0.99",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_KEY_FIREWORKS_1"
         },
         {
-          "id": "key-rare",
-          "name": "5x Rare Keys",
-          "description": "Better loot pool with a chance of legendary drops.",
-          "price_display": "$8",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_KEY_RARE"
+          "id": "key-fireworks-3",
+          "name": "3x Fireworks Crate Key",
+          "description": "",
+          "price_display": "$2.49",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_KEY_FIREWORKS_3"
         },
         {
-          "id": "key-legendary",
-          "name": "3x Legendary Keys",
-          "description": "The best crate. Guaranteed high-tier loot.",
-          "price_display": "$15",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_KEY_LEGENDARY"
+          "id": "key-fireworks-6",
+          "name": "6x Fireworks Crate Key",
+          "description": "",
+          "price_display": "$4.49",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_KEY_FIREWORKS_6"
+        },
+        {
+          "id": "key-maces-1",
+          "name": "1x Maces Crate Key",
+          "description": "",
+          "price_display": "$0.99",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_KEY_MACES_1"
+        },
+        {
+          "id": "key-maces-3",
+          "name": "3x Maces Crate Key",
+          "description": "",
+          "price_display": "$2.49",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_KEY_MACES_3"
+        },
+        {
+          "id": "key-maces-6",
+          "name": "6x Maces Crate Key",
+          "description": "",
+          "price_display": "$4.49",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_KEY_MACES_6"
         }
       ]
     }
