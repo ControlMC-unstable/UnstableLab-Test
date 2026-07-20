@@ -12,6 +12,7 @@
     <a class="back" href="index.html">← All sections</a>
 
     <div class="section-header">
+      <div class="icon" id="section-icon"></div>
       <h1 id="section-title">Loading…</h1>
       <p id="section-description"></p>
     </div>
@@ -54,6 +55,26 @@
       document.title = `${section.name} — ${STATE.data.server_name || 'Store'}`;
       document.getElementById('section-title').textContent = section.name;
       document.getElementById('section-description').textContent = section.description || '';
+
+      // Section icon (mirrors the landing card)
+      const iconEl = document.getElementById('section-icon');
+      iconEl.innerHTML = '';
+      iconEl.classList.remove('emoji');
+      if (section.icon_image) {
+        const img = document.createElement('img');
+        img.src = section.icon_image;
+        img.alt = '';
+        img.onerror = () => {
+          iconEl.classList.add('emoji');
+          iconEl.textContent = section.icon || '📦';
+        };
+        iconEl.appendChild(img);
+      } else if (section.icon) {
+        iconEl.classList.add('emoji');
+        iconEl.textContent = section.icon;
+      } else {
+        iconEl.style.display = 'none';
+      }
 
       const hasUser = isValidUsername(STATE.username);
       for (const p of (section.products || [])) {
