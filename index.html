@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Unstable Lab Store</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07070a;
+      --panel: #12111a;
+      --panel-2: #191826;
+      --border: #2a2740;
+      --text: #ede9fe;
+      --muted: #a29bc2;
+      --accent: #8b5cf6;
+      --accent-hover: #7c3aed;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font: 16px/1.5 system-ui, -apple-system, Segoe UI, sans-serif;
+      background:
+        radial-gradient(900px 500px at 50% -100px, rgba(139,92,246,0.22), transparent 65%),
+        radial-gradient(600px 400px at 15% 30%, rgba(124,58,237,0.10), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 48px 24px 80px; }
+    header { text-align: center; margin-bottom: 40px; }
+    .logo {
+      width: 128px;
+      height: 128px;
+      margin: 0 auto 16px;
+      display: block;
+      filter: drop-shadow(0 8px 24px rgba(139,92,246,0.35));
+    }
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 44px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(180deg, #ffffff 0%, #c4b5fd 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    header p { margin: 0; color: var(--muted); font-size: 17px; }
+
+    .username-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 22px;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .username-card label { color: var(--muted); font-size: 14px; }
+    .username-card input {
+      flex: 1;
+      min-width: 200px;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text);
+      font: inherit;
+    }
+    .username-card input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    .username-card .status {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .username-card .status.saved { color: #6bd48a; }
+
+    .head {
+      width: 56px;
+      height: 56px;
+      border-radius: 8px;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      image-rendering: pixelated;
+      image-rendering: -moz-crisp-edges;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 24px;
+      overflow: hidden;
+      transition: opacity 0.15s ease;
+    }
+    .head img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      image-rendering: pixelated;
+      image-rendering: -moz-crisp-edges;
+    }
+    .head.loading { opacity: 0.5; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .card:hover { transform: translateY(-2px); border-color: #3a4258; }
+    .card h3 { margin: 0 0 6px; font-size: 20px; }
+    .card .price { color: var(--accent); font-weight: 600; font-size: 22px; margin-bottom: 10px; }
+    .card p { margin: 0 0 20px; color: var(--muted); font-size: 14px; flex: 1; }
+    .card button {
+      background: var(--accent);
+      color: white;
+      border: 0;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .card button:hover { background: var(--accent-hover); }
+    .card button:disabled { background: #333844; color: #6b7285; cursor: not-allowed; }
+
+    footer {
+      text-align: center;
+      margin-top: 48px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .error {
+      background: #2a1418;
+      border: 1px solid #5a2530;
+      color: #ffb4b4;
+      padding: 14px 18px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img class="logo" id="logo" src="logo.png" alt="Unstable Lab"
+           onerror="if(this.src.endsWith('logo.png')){this.src='logo.svg';}else{this.style.display='none';}">
+      <h1 id="server-name">Unstable Lab Store</h1>
+      <p id="server-tagline">Loading…</p>
+    </header>
+
+    <div id="error" class="error" hidden></div>
+
+    <div class="username-card">
+      <div class="head" id="head" aria-hidden="true">?</div>
+      <label for="username">Minecraft username:</label>
+      <input id="username" type="text" placeholder="e.g. Steve" autocomplete="off" spellcheck="false">
+      <span class="status" id="status">Enter your username to enable purchases.</span>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <footer>
+      Payments handled securely by Stripe. Your rank or item is delivered in-game within about a minute of payment.
+    </footer>
+  </div>
+
+  <script>
+    const STATE = { username: '', products: [] };
+
+    function showError(msg) {
+      const el = document.getElementById('error');
+      el.textContent = msg;
+      el.hidden = false;
+    }
+
+    let headUpdateTimer = null;
+
+    function updateHead() {
+      const head = document.getElementById('head');
+      if (!isValidUsername(STATE.username)) {
+        head.innerHTML = '?';
+        head.classList.remove('loading');
+        return;
+      }
+      // Debounce so we don't hammer the avatar API while the user is still typing.
+      clearTimeout(headUpdateTimer);
+      head.classList.add('loading');
+      headUpdateTimer = setTimeout(() => {
+        const img = new Image();
+        // mc-heads.net returns a 3D-ish head PNG for any valid MC username.
+        // Unknown names fall back to a Steve/Alex head, which is fine here.
+        img.src = `https://mc-heads.net/avatar/${encodeURIComponent(STATE.username)}/56`;
+        img.alt = `${STATE.username}'s head`;
+        img.onload = () => {
+          head.innerHTML = '';
+          head.appendChild(img);
+          head.classList.remove('loading');
+        };
+        img.onerror = () => {
+          head.innerHTML = '?';
+          head.classList.remove('loading');
+        };
+      }, 350);
+    }
+
+    function saveUsername(name) {
+      STATE.username = name.trim();
+      try { localStorage.setItem('mc_username', STATE.username); } catch (_) {}
+      const status = document.getElementById('status');
+      if (STATE.username) {
+        status.textContent = `Ready to purchase as ${STATE.username}.`;
+        status.classList.add('saved');
+      } else {
+        status.textContent = 'Enter your username to enable purchases.';
+        status.classList.remove('saved');
+      }
+      updateHead();
+      renderProducts(); // re-render so buy buttons enable/disable
+    }
+
+    function isValidUsername(name) {
+      return /^[a-zA-Z0-9_]{3,16}$/.test(name);
+    }
+
+    function buy(product) {
+      if (!isValidUsername(STATE.username)) {
+        showError('Please enter a valid Minecraft username (3–16 characters, letters/numbers/underscore) before purchasing.');
+        document.getElementById('username').focus();
+        return;
+      }
+      document.getElementById('error').hidden = true;
+
+      // Stripe Payment Link with the username attached as client_reference_id.
+      // The backend webhook will read that field to know who to deliver to.
+      const url = new URL(product.payment_link);
+      url.searchParams.set('client_reference_id', STATE.username);
+      window.location.href = url.toString();
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+      const hasUser = isValidUsername(STATE.username);
+      for (const p of STATE.products) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h3></h3>
+          <div class="price"></div>
+          <p></p>
+          <button ${hasUser ? '' : 'disabled'}>${hasUser ? 'Buy' : 'Enter username first'}</button>
+        `;
+        card.querySelector('h3').textContent = p.name;
+        card.querySelector('.price').textContent = p.price_display;
+        card.querySelector('p').textContent = p.description;
+        card.querySelector('button').addEventListener('click', () => buy(p));
+        grid.appendChild(card);
+      }
+    }
+
+    async function load() {
+      try {
+        const res = await fetch('products.json', { cache: 'no-cache' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+
+        document.getElementById('server-name').textContent = data.server_name || 'Server Shop';
+        document.getElementById('server-tagline').textContent = data.server_tagline || '';
+        if (data.accent_color) {
+          document.documentElement.style.setProperty('--accent', data.accent_color);
+        }
+
+        STATE.products = data.products || [];
+      } catch (e) {
+        showError('Could not load products.json — check that the file exists and is valid JSON.');
+        console.error(e);
+        return;
+      }
+
+      // Restore username if we remembered one from a previous visit.
+      try {
+        const remembered = localStorage.getItem('mc_username') || '';
+        if (remembered) {
+          document.getElementById('username').value = remembered;
+          saveUsername(remembered);
+        } else {
+          renderProducts();
+        }
+      } catch (_) {
+        renderProducts();
+      }
+    }
+
+    document.getElementById('username').addEventListener('input', e => saveUsername(e.target.value));
+    load();
+  </script>
+</body>
+</html>

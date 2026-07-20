@@ -1,0 +1,28 @@
+{
+  "server_name": "Unstable Lab Store",
+  "server_tagline": "Ranks, cosmetics, and dangerously fun perks. Delivered in-game within a minute.",
+  "accent_color": "#8b5cf6",
+  "products": [
+    {
+      "id": "vip",
+      "name": "VIP Rank",
+      "description": "Colored username, /fly in the lobby, VIP kit.",
+      "price_display": "$5",
+      "payment_link": "https://buy.stripe.com/test_REPLACE_ME_VIP"
+    },
+    {
+      "id": "mvp",
+      "name": "MVP Rank",
+      "description": "Everything in VIP plus a custom prefix and /nick.",
+      "price_display": "$12",
+      "payment_link": "https://buy.stripe.com/test_REPLACE_ME_MVP"
+    },
+    {
+      "id": "cosmetic-pack",
+      "name": "Cosmetic Pack",
+      "description": "Particle trails, hat items, and 3 pet cosmetics.",
+      "price_display": "$3",
+      "payment_link": "https://buy.stripe.com/test_REPLACE_ME_COSMETIC"
+    }
+  ]
+}
