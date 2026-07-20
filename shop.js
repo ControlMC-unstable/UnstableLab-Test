@@ -2,14 +2,56 @@
 
 const STATE = { username: '', data: null };
 
+// ===== Server IP top bar =====
+// Injected on every page so both index.html and section.html get it.
+const SERVER_IP = 'PLAY.UNSTABLELAB.XYZ';
+
+(function installIpBar() {
+  const bar = document.createElement('div');
+  bar.className = 'ip-bar';
+  bar.innerHTML = `
+    <span class="ip-label">Play now on</span>
+    <span class="ip-address"></span>
+    <button class="copy-btn" type="button">Copy</button>
+  `;
+  bar.querySelector('.ip-address').textContent = SERVER_IP;
+
+  const btn = bar.querySelector('.copy-btn');
+  btn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(SERVER_IP);
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 1500);
+    } catch (_) {
+      // Fallback for old browsers / non-HTTPS pages
+      const t = document.createElement('textarea');
+      t.value = SERVER_IP;
+      document.body.appendChild(t);
+      t.select();
+      try { document.execCommand('copy'); } catch (_) {}
+      document.body.removeChild(t);
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+    }
+  });
+
+  document.body.insertBefore(bar, document.body.firstChild);
+})();
+
 // ===== Background effects =====
 // Injects the fixed background layers so we don't have to duplicate them in
-// every HTML file, and wires up the cursor-following spotlight.
+// every HTML file, and wires up the cursor-following spotlight/magnifier.
 (function installBackground() {
-  const layers = ['bg-fallback', 'bg', 'bg-overlay', 'spotlight'];
+  const layers = ['bg-fallback', 'bg', 'bg-zoom', 'bg-overlay', 'spotlight'];
   for (const cls of layers) {
     const el = document.createElement('div');
     el.className = cls;
+    // Insert at the very start so the IP bar (added earlier) stays on top of them.
     document.body.insertBefore(el, document.body.firstChild);
   }
 

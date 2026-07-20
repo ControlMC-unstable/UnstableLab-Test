@@ -24,8 +24,20 @@ body {
 }
 
 /* ===== Background layers ===== */
-/* Actual background image — sits at the bottom, zooms + brightens on hover */
+/* Base background image — stays at normal scale */
 .bg {
+  position: fixed;
+  inset: 0;
+  z-index: -4;
+  background-image: url('background.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+/* Zoomed copy of the background, revealed only around the cursor via a
+   circular mask. Creates a magnifying-glass effect that follows the mouse. */
+.bg-zoom {
   position: fixed;
   inset: 0;
   z-index: -3;
@@ -33,21 +45,32 @@ body {
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
-  transform: scale(1.02);
-  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-              filter    0.8s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform, filter;
+  transform: scale(1.18);
+  transform-origin: var(--mx, 50%) var(--my, 50%);
+  filter: brightness(1.15) saturate(1.25);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  will-change: transform, opacity, mask-position;
+  -webkit-mask-image: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    black 25%,
+    rgba(0,0,0,0.5) 55%,
+    transparent 80%
+  );
+          mask-image: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    black 25%,
+    rgba(0,0,0,0.5) 55%,
+    transparent 80%
+  );
 }
-body:hover .bg {
-  transform: scale(1.08);
-  filter: brightness(1.15) saturate(1.2);
-}
+body:hover .bg-zoom { opacity: 1; }
 
 /* Fallback gradient — visible if background.png is missing */
 .bg-fallback {
   position: fixed;
   inset: 0;
-  z-index: -4;
+  z-index: -5;
   pointer-events: none;
   background:
     radial-gradient(900px 500px at 50% -100px, rgba(139,92,246,0.25), transparent 65%),
@@ -84,7 +107,64 @@ body:hover .bg {
 }
 body:hover .spotlight { opacity: 1; }
 
-.wrap { max-width: 1040px; margin: 0 auto; padding: 48px 24px 80px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 24px 24px 80px; }
+
+/* ===== Server IP top bar ===== */
+.ip-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  background: rgba(12, 10, 20, 0.85);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  flex-wrap: wrap;
+  font-size: 15px;
+}
+.ip-bar .ip-label {
+  color: var(--muted);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+.ip-bar .ip-address {
+  font-family: 'SF Mono', Monaco, Consolas, 'Courier New', monospace;
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: linear-gradient(180deg, #ffffff 0%, #c4b5fd 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.ip-bar .copy-btn {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.ip-bar .copy-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+.ip-bar .copy-btn.copied {
+  background: #059669;
+  border-color: #059669;
+  color: white;
+}
 
 /* ===== Header ===== */
 header { text-align: center; margin-bottom: 40px; }
