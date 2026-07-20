@@ -7,7 +7,6 @@
       "id": "money",
       "name": "Money",
       "icon": "💰",
-      "icon_image": "icons/money.png",
       "description": "In-game currency packs.",
       "products": [
         {
@@ -37,7 +36,6 @@
       "id": "ranks",
       "name": "Ranks",
       "icon": "👑",
-      "icon_image": "icons/ranks.png",
       "description": "Permanent perks and cosmetic titles.",
       "products": [
         {
@@ -67,7 +65,6 @@
       "id": "keys",
       "name": "Crate Keys",
       "icon": "🗝️",
-      "icon_image": "icons/keys.png",
       "description": "Open crates for random loot.",
       "products": [
         {

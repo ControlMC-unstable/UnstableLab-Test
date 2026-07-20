@@ -17,15 +17,16 @@ pick a category, and check out through Stripe.
 | `logo.svg` | Placeholder logo so the site works before you add `logo.png` |
 | `background.png` | **The background image** — save your Unstable Lab screenshot here |
 
-## The background and logo
+## Images to add
 
-- Save your **Unstable Lab minecraft screenshot** as `background.png` in
-  this folder. It becomes the site's background (fixed, covered by a
-  dark gradient so text stays readable).
-- Save your **flask logo** as `logo.png` in this folder.
+- **`logo.png`** — your flask logo (site header).
+- **`background.png`** — your Unstable Lab minecraft screenshot (page background).
+- **`icons/money.png`** — cash & coins for the Money category.
+- **`icons/keys.png`** — gold key for the Crate Keys category.
+- **`icons/ranks.png`** — crown banner for the Ranks category.
 
-If either file is missing, the site still works — it just uses a
-fallback gradient / the placeholder SVG.
+All are optional — if any file is missing, the site falls back
+gracefully (gradient background, placeholder SVG logo, emoji icons).
 
 ## Deploy to GitHub Pages
 
