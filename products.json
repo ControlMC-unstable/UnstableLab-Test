@@ -2,27 +2,93 @@
   "server_name": "Unstable Lab Store",
   "server_tagline": "Ranks, cosmetics, and dangerously fun perks. Delivered in-game within a minute.",
   "accent_color": "#8b5cf6",
-  "products": [
+  "sections": [
     {
-      "id": "vip",
-      "name": "VIP Rank",
-      "description": "Colored username, /fly in the lobby, VIP kit.",
-      "price_display": "$5",
-      "payment_link": "https://buy.stripe.com/test_REPLACE_ME_VIP"
+      "id": "money",
+      "name": "Money",
+      "icon": "💰",
+      "description": "In-game currency packs.",
+      "products": [
+        {
+          "id": "money-small",
+          "name": "$10,000 in-game",
+          "description": "A starter stack of coins to get you rolling.",
+          "price_display": "$2",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_MONEY_S"
+        },
+        {
+          "id": "money-medium",
+          "name": "$100,000 in-game",
+          "description": "Enough for a shop, some plots, and gear.",
+          "price_display": "$8",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_MONEY_M"
+        },
+        {
+          "id": "money-large",
+          "name": "$1,000,000 in-game",
+          "description": "The tycoon pack. Build an empire.",
+          "price_display": "$25",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_MONEY_L"
+        }
+      ]
     },
     {
-      "id": "mvp",
-      "name": "MVP Rank",
-      "description": "Everything in VIP plus a custom prefix and /nick.",
-      "price_display": "$12",
-      "payment_link": "https://buy.stripe.com/test_REPLACE_ME_MVP"
+      "id": "ranks",
+      "name": "Ranks",
+      "icon": "👑",
+      "description": "Permanent perks and cosmetic titles.",
+      "products": [
+        {
+          "id": "vip",
+          "name": "VIP",
+          "description": "Colored username, /fly in the lobby, VIP kit.",
+          "price_display": "$5",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_VIP"
+        },
+        {
+          "id": "mvp",
+          "name": "MVP",
+          "description": "Everything in VIP plus a custom prefix and /nick.",
+          "price_display": "$12",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_MVP"
+        },
+        {
+          "id": "elite",
+          "name": "ELITE",
+          "description": "Top-tier rank. All perks, plus /feed and /heal.",
+          "price_display": "$25",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_ELITE"
+        }
+      ]
     },
     {
-      "id": "cosmetic-pack",
-      "name": "Cosmetic Pack",
-      "description": "Particle trails, hat items, and 3 pet cosmetics.",
-      "price_display": "$3",
-      "payment_link": "https://buy.stripe.com/test_REPLACE_ME_COSMETIC"
+      "id": "keys",
+      "name": "Crate Keys",
+      "icon": "🗝️",
+      "description": "Open crates for random loot.",
+      "products": [
+        {
+          "id": "key-common",
+          "name": "5x Common Keys",
+          "description": "Basic loot pool. Great for stacking up.",
+          "price_display": "$3",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_KEY_COMMON"
+        },
+        {
+          "id": "key-rare",
+          "name": "5x Rare Keys",
+          "description": "Better loot pool with a chance of legendary drops.",
+          "price_display": "$8",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_KEY_RARE"
+        },
+        {
+          "id": "key-legendary",
+          "name": "3x Legendary Keys",
+          "description": "The best crate. Guaranteed high-tier loot.",
+          "price_display": "$15",
+          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_KEY_LEGENDARY"
+        }
+      ]
     }
   ]
 }
