@@ -21,26 +21,68 @@ body {
   color: var(--text);
   min-height: 100vh;
   background-color: var(--bg);
-  background-image:
-    linear-gradient(180deg, rgba(7,7,10,0.55) 0%, rgba(7,7,10,0.85) 60%, rgba(7,7,10,0.95) 100%),
-    url('background.png');
-  background-size: cover;
-  background-position: center top;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
 }
 
-/* Fallback gradient if background.png is missing — layered under the image so it still looks good */
-body::before {
-  content: "";
+/* ===== Background layers ===== */
+/* Actual background image — sits at the bottom, zooms + brightens on hover */
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  background-image: url('background.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  transform: scale(1.02);
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              filter    0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, filter;
+}
+body:hover .bg {
+  transform: scale(1.08);
+  filter: brightness(1.15) saturate(1.2);
+}
+
+/* Fallback gradient — visible if background.png is missing */
+.bg-fallback {
+  position: fixed;
+  inset: 0;
+  z-index: -4;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 500px at 50% -100px, rgba(139,92,246,0.25), transparent 65%),
+    radial-gradient(600px 400px at 15% 30%, rgba(124,58,237,0.12), transparent 60%),
+    var(--bg);
+}
+
+/* Dark overlay so text on top of the background image stays readable */
+.bg-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(7,7,10,0.55) 0%,
+    rgba(7,7,10,0.85) 60%,
+    rgba(7,7,10,0.95) 100%);
+}
+
+/* Purple spotlight that follows the cursor */
+.spotlight {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background:
-    radial-gradient(900px 500px at 50% -100px, rgba(139,92,246,0.25), transparent 65%),
-    radial-gradient(600px 400px at 15% 30%, rgba(124,58,237,0.12), transparent 60%);
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(
+    500px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(139,92,246,0.28) 0%,
+    rgba(139,92,246,0.10) 30%,
+    transparent 60%
+  );
 }
+body:hover .spotlight { opacity: 1; }
 
 .wrap { max-width: 1040px; margin: 0 auto; padding: 48px 24px 80px; }
 

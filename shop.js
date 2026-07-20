@@ -2,6 +2,32 @@
 
 const STATE = { username: '', data: null };
 
+// ===== Background effects =====
+// Injects the fixed background layers so we don't have to duplicate them in
+// every HTML file, and wires up the cursor-following spotlight.
+(function installBackground() {
+  const layers = ['bg-fallback', 'bg', 'bg-overlay', 'spotlight'];
+  for (const cls of layers) {
+    const el = document.createElement('div');
+    el.className = cls;
+    document.body.insertBefore(el, document.body.firstChild);
+  }
+
+  // Throttle mousemove with requestAnimationFrame so we don't thrash on
+  // high-refresh-rate mice.
+  let pendingX = null, pendingY = null, rafPending = false;
+  function flush() {
+    document.documentElement.style.setProperty('--mx', pendingX + 'px');
+    document.documentElement.style.setProperty('--my', pendingY + 'px');
+    rafPending = false;
+  }
+  window.addEventListener('mousemove', e => {
+    pendingX = e.clientX;
+    pendingY = e.clientY;
+    if (!rafPending) { rafPending = true; requestAnimationFrame(flush); }
+  }, { passive: true });
+})();
+
 function showError(msg) {
   const el = document.getElementById('error');
   if (!el) return alert(msg);
