@@ -34,24 +34,6 @@
 
   <script src="shop.js"></script>
   <script>
-    function setIcon(iconEl, section) {
-      iconEl.innerHTML = '';
-      iconEl.classList.remove('emoji');
-      if (section.icon_image) {
-        const img = document.createElement('img');
-        img.src = section.icon_image;
-        img.alt = '';
-        img.onerror = () => {
-          iconEl.classList.add('emoji');
-          iconEl.textContent = section.icon || '📦';
-        };
-        iconEl.appendChild(img);
-      } else {
-        iconEl.classList.add('emoji');
-        iconEl.textContent = section.icon || '📦';
-      }
-    }
-
     function renderSections() {
       const container = document.getElementById('sections');
       container.innerHTML = '';
@@ -66,7 +48,7 @@
           <p></p>
           <div class="cta">Browse →</div>
         `;
-        setIcon(a.querySelector('.icon'), s);
+        a.querySelector('.icon').textContent = s.icon || '📦';
         a.querySelector('h2').textContent = s.name;
         a.querySelector('p').textContent = s.description || '';
         container.appendChild(a);
