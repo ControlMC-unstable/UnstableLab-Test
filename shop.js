@@ -6,6 +6,7 @@ const STATE = { username: '', data: null };
 // Injected on every page so both index.html and section.html get it.
 const SERVER_IP = 'PLAY.UNSTABLELAB.XYZ';
 const DISCORD_URL = 'https://discord.gg/M8SczA8yWJ';
+const EMAIL = 'unstablelab@outlook.com';
 
 // Copy text to clipboard, with a fallback for browsers that don't have
 // the async clipboard API (old browsers / non-HTTPS pages).
@@ -55,11 +56,18 @@ function wireCopyButton(btn, text) {
       <a class="discord-link" href="${DISCORD_URL}" target="_blank" rel="noopener">discord.gg/M8SczA8yWJ</a>
       <button class="copy-btn" type="button" data-copy="discord">Copy</button>
     </div>
+    <div class="ip-bar-divider" aria-hidden="true"></div>
+    <div class="ip-bar-item">
+      <span class="ip-label">Email</span>
+      <a class="discord-link" href="mailto:${EMAIL}">${EMAIL}</a>
+      <button class="copy-btn" type="button" data-copy="email">Copy</button>
+    </div>
   `;
   bar.querySelector('.ip-address').textContent = SERVER_IP;
 
   wireCopyButton(bar.querySelector('[data-copy="ip"]'), SERVER_IP);
   wireCopyButton(bar.querySelector('[data-copy="discord"]'), DISCORD_URL);
+  wireCopyButton(bar.querySelector('[data-copy="email"]'), EMAIL);
 
   document.body.insertBefore(bar, document.body.firstChild);
 })();
