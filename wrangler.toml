@@ -2,14 +2,7 @@ name = "unstablelabstore"
 main = "src/index.js"
 compatibility_date = "2024-11-01"
 
-# KV namespace binding — Cloudflare will assign the real ID after you create the
-# namespace with `wrangler kv:namespace create ORDERS`. Paste that id here.
-[[kv_namespaces]]
-binding = "ORDERS"
-id = "e401bbe277274b8f942f686eafe699fb"
-
-# Secrets (set with `wrangler secret put NAME`, NOT committed here):
-#   STRIPE_WEBHOOK_SECRET   — from your Stripe dashboard → Webhooks
-#   PLUGIN_API_KEY          — any random string; the plugin sends this in
-#                              the Authorization header so randos can't
-#                              spam your pending-orders endpoint.
+[[d1_databases]]
+binding = "DB"
+database_name = "unstable-store-db"
+database_id = "8c08d5b9-b928-457d-93f0-c8cefdc95bac"
