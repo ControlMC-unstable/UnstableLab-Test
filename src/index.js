@@ -63,19 +63,9 @@ export default {
 
 // ===== DB init =====
 async function initDB(env) {
-  await env.DB.exec(`
-    CREATE TABLE IF NOT EXISTS orders (
-      id TEXT PRIMARY KEY,
-      username TEXT NOT NULL,
-      product_id TEXT NOT NULL,
-      quantity INTEGER DEFAULT 1,
-      amount_total INTEGER DEFAULT 0,
-      currency TEXT DEFAULT 'usd',
-      created_at INTEGER,
-      source TEXT,
-      delivered_at INTEGER
-    )
-  `);
+  await env.DB.prepare(
+    `CREATE TABLE IF NOT EXISTS orders (id TEXT PRIMARY KEY, username TEXT NOT NULL, product_id TEXT NOT NULL, quantity INTEGER DEFAULT 1, amount_total INTEGER DEFAULT 0, currency TEXT DEFAULT 'usd', created_at INTEGER, source TEXT, delivered_at INTEGER)`
+  ).run();
 }
 
 // ===== Auth for the plugin endpoints =====
