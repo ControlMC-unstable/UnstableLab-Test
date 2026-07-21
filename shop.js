@@ -5,10 +5,10 @@ const STATE = { username: '', data: null };
 // ===== Server IP top bar =====
 // Injected on every page so both index.html and section.html get it.
 const SERVER_IP = 'PLAY.UNSTABLELAB.XYZ';
-const DISCORD_URL = 'https://discord.gg/M8SczA8yWJ';
+const DISCORD_URL = 'https://discord.gg/MPWYsZrhf4';
 
 // Copy text to clipboard, with a fallback for browsers that don't have
-// the async clipboard API (old browsers / non-HTTPS pages).
+// the async clipboard API (old browsers / non-HTTPS pagehttps://discord.gg/MPWYsZrhf4s).
 async function copyToClipboard(text) {
   try {
     await navigator.clipboard.writeText(text);
