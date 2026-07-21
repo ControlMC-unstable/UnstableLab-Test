@@ -28,17 +28,16 @@ const KNOWN_PRODUCTS = new Set([
 // This lets us identify the product without needing metadata on the Payment Link.
 // Add each Payment Link's plink_ ID here.
 const PAYMENT_LINK_TO_PRODUCT = {
-  'plink_1TvR93CcqJJ5hDAznvbcao8G': 'key-fireworks-1',
-  // Add the rest of your payment links here:
-  // 'plink_XXXX': 'money-5k',
-  // 'plink_XXXX': 'money-10k',
-  // 'plink_XXXX': 'unstable',
-  // 'plink_XXXX': 'key-fireworks-1',
-  // 'plink_XXXX': 'key-fireworks-3',
-  // 'plink_XXXX': 'key-fireworks-6',
-  // 'plink_XXXX': 'key-maces-1',
-  // 'plink_XXXX': 'key-maces-3',
-  // 'plink_XXXX': 'key-maces-6',
+  'plink_1TvS1cCcqJJ5hDAzcmVF5sPm': 'supporter',
+  'plink_1TvS2RCcqJJ5hDAzPxQvnnOr': 'unstable',
+  'plink_1TvS34CcqJJ5hDAzJIxWWoRo': 'money-5k',
+  'plink_1TvS3cCcqJJ5hDAzPLvDeB1G': 'money-10k',
+  'plink_1TvS49CcqJJ5hDAzNxXVoIRL': 'key-fireworks-1',
+  'plink_1TvS4nCcqJJ5hDAzCH44W6cJ': 'key-fireworks-3',
+  'plink_1TvS5JCcqJJ5hDAzLQedKYJL': 'key-fireworks-6',
+  'plink_1TvS68CcqJJ5hDAzwnLDyknP': 'key-maces-1',
+  'plink_1TvS6YCcqJJ5hDAzAp9nqE1Y': 'key-maces-3',
+  'plink_1TvS77CcqJJ5hDAzGPUj3UTv': 'key-maces-6',
 };
 
 export default {
