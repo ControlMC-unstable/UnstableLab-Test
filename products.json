@@ -14,14 +14,14 @@
           "name": "$5,000",
           "description": "",
           "price_display": "$1.99",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_MONEY_5K"
+          "payment_link": "https://buy.stripe.com/00wcN4cB92Tl1RQeVDeQM03"
         },
         {
           "id": "money-10k",
           "name": "$10,000",
           "description": "",
           "price_display": "$3.99",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_MONEY_10K"
+          "payment_link": "https://buy.stripe.com/7sYfZg30z79BdAydRzeQM04"
         }
       ]
     },
@@ -43,7 +43,7 @@
             "1.25x Cash Multiplier"
           ],
           "price_display": "$2.99",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_SUPPORTER"
+          "payment_link": "https://buy.stripe.com/28E8wO8kT79B1RQaFneQM01"
         },
         {
           "id": "unstable",
@@ -56,7 +56,7 @@
             "Custom Changeable Tag"
           ],
           "price_display": "$4.99",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_UNSTABLE"
+          "payment_link": "https://buy.stripe.com/eVq3cu0SrbpRdAy5l3eQM02"
         }
       ]
     },
@@ -71,42 +71,42 @@
           "name": "1x Fireworks Crate Key",
           "description": "",
           "price_display": "$0.99",
-          "payment_link": "https://buy.stripe.com/3cIdR8cB98dF1RQ8xfeQM00"
+          "payment_link": "https://buy.stripe.com/eVqfZg44D2Tl6868xfeQM05"
         },
         {
           "id": "key-fireworks-3",
           "name": "3x Fireworks Crate Key",
           "description": "",
           "price_display": "$2.49",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_KEY_FIREWORKS_3"
+          "payment_link": "https://buy.stripe.com/eVq28qgRpeC3542bJreQM06"
         },
         {
           "id": "key-fireworks-6",
           "name": "6x Fireworks Crate Key",
           "description": "",
           "price_display": "$4.49",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_KEY_FIREWORKS_6"
+          "payment_link": "https://buy.stripe.com/aFaaEW8kT0LdeEC5l3eQM07"
         },
         {
           "id": "key-maces-1",
           "name": "1x Maces Crate Key",
           "description": "",
           "price_display": "$0.99",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_KEY_MACES_1"
+          "payment_link": "https://buy.stripe.com/dRmfZg9oX8dFbsqeVDeQM08"
         },
         {
           "id": "key-maces-3",
           "name": "3x Maces Crate Key",
           "description": "",
           "price_display": "$2.49",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_KEY_MACES_3"
+          "payment_link": "https://buy.stripe.com/aFacN47gP8dF2VU00JeQM09"
         },
         {
           "id": "key-maces-6",
           "name": "6x Maces Crate Key",
           "description": "",
           "price_display": "$4.49",
-          "payment_link": "https://buy.stripe.com/test_REPLACE_ME_KEY_MACES_6"
+          "payment_link": "https://buy.stripe.com/aFa3cu44DalN1RQ28ReQM0a"
         }
       ]
     }
