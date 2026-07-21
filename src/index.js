@@ -24,6 +24,23 @@ const KNOWN_PRODUCTS = new Set([
   'key-maces-1',     'key-maces-3',     'key-maces-6',
 ]);
 
+// Map Stripe Payment Link IDs to product IDs.
+// This lets us identify the product without needing metadata on the Payment Link.
+// Add each Payment Link's plink_ ID here.
+const PAYMENT_LINK_TO_PRODUCT = {
+  'plink_1TvR93CcqJJ5hDAznvbcao8G': 'key-fireworks-1',
+  // Add the rest of your payment links here:
+  // 'plink_XXXX': 'money-5k',
+  // 'plink_XXXX': 'money-10k',
+  // 'plink_XXXX': 'unstable',
+  // 'plink_XXXX': 'key-fireworks-1',
+  // 'plink_XXXX': 'key-fireworks-3',
+  // 'plink_XXXX': 'key-fireworks-6',
+  // 'plink_XXXX': 'key-maces-1',
+  // 'plink_XXXX': 'key-maces-3',
+  // 'plink_XXXX': 'key-maces-6',
+};
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -87,10 +104,11 @@ async function handleStripeWebhook(request, env) {
 
   const session = event.data.object;
   const username = session.client_reference_id;
-  // We identify products by the Payment Link URL used. In your Stripe dashboard
-  // you'll add metadata `product_id: supporter` (etc.) to each Payment Link,
-  // and Stripe copies that onto the session.
-  const productId = session.metadata && session.metadata.product_id;
+  // Try metadata first, then fall back to looking up the Payment Link ID.
+  let productId = session.metadata && session.metadata.product_id;
+  if (!productId && session.payment_link) {
+    productId = PAYMENT_LINK_TO_PRODUCT[session.payment_link];
+  }
 
   if (!username || !productId) {
     console.error('missing username or product_id', { username, productId });
