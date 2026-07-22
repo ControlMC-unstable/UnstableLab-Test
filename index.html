@@ -79,6 +79,9 @@
           const row = document.createElement('div');
           row.className = 'product';
           const noQty = !!s.no_quantity;
+          const cart = getCart();
+          const inCart = cart.find(i => i.id === p.id);
+
           row.innerHTML = `
             <div class="product-info">
               <h3></h3>
@@ -86,10 +89,19 @@
             </div>
             <div class="product-price"></div>
             <div class="product-actions">
-              <button class="add-cart-btn" data-product-id="" ${hasUser ? '' : 'disabled'}>${hasUser ? 'Add to Cart' : 'Enter username'}</button>
+              ${inCart
+                ? (noQty
+                  ? `<button class="add-cart-btn in-cart" disabled>Added to Cart</button>`
+                  : `<div class="inline-qty">
+                       <button class="inline-qty-btn" data-dir="-1">−</button>
+                       <span class="inline-qty-val">${inCart.qty || 1}</span>
+                       <button class="inline-qty-btn" data-dir="1">+</button>
+                     </div>
+                     <button class="add-cart-btn in-cart" disabled>Added to Cart</button>`)
+                : `<button class="add-cart-btn" data-product-id="${p.id}" ${hasUser ? '' : 'disabled'}>${hasUser ? 'Add to Cart' : 'Enter username'}</button>`
+              }
             </div>
           `;
-          row.querySelector('.add-cart-btn').dataset.productId = p.id;
           row.querySelector('h3').textContent = p.name;
           row.querySelector('.product-price').textContent = p.price_display;
 
@@ -107,7 +119,31 @@
           }
 
           const productWithMeta = Object.assign({}, p, noQty ? { no_quantity: true } : {});
-          row.querySelector('.add-cart-btn').addEventListener('click', () => addToCart(productWithMeta));
+
+          if (inCart && !noQty) {
+            // Wire up +/- buttons
+            row.querySelectorAll('.inline-qty-btn').forEach(btn => {
+              btn.addEventListener('click', () => {
+                const dir = parseInt(btn.dataset.dir);
+                const currentQty = (getCart().find(i => i.id === p.id) || {}).qty || 1;
+                if (currentQty + dir < 1) {
+                  removeFromCart(p.id);
+                } else {
+                  updateCartQty(p.id, dir);
+                }
+                renderSections();
+              });
+            });
+          } else if (!inCart) {
+            const addBtn = row.querySelector('.add-cart-btn');
+            if (addBtn) {
+              addBtn.addEventListener('click', () => {
+                addToCart(productWithMeta);
+                renderSections();
+              });
+            }
+          }
+
           products.appendChild(row);
         }
 
