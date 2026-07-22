@@ -182,10 +182,10 @@ function addToCart(product) {
   // Brief feedback on the button
   const btn = document.querySelector(`[data-product-id="${product.id}"]`);
   if (btn) {
-    const origHTML = btn.innerHTML;
-    btn.innerHTML = '✓';
+    const orig = btn.textContent;
+    btn.textContent = 'Added!';
     btn.classList.add('added');
-    setTimeout(() => { btn.innerHTML = origHTML; btn.classList.remove('added'); }, 800);
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('added'); }, 800);
   }
 }
 function removeFromCart(productId) {

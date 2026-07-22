@@ -78,6 +78,7 @@
         for (const p of (s.products || [])) {
           const row = document.createElement('div');
           row.className = 'product';
+          const noQty = !!s.no_quantity;
           row.innerHTML = `
             <div class="product-info">
               <h3></h3>
@@ -86,12 +87,11 @@
             <div class="product-price"></div>
             <div class="product-actions">
               <button class="buy-btn" ${hasUser ? '' : 'disabled'}>${hasUser ? 'Buy' : 'Enter username'}</button>
-              <button class="add-cart-btn" data-product-id="" ${hasUser ? '' : 'disabled'} title="Add to cart">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-              </button>
+              ${noQty ? '' : `<button class="add-cart-btn" data-product-id="" ${hasUser ? '' : 'disabled'}>Add to Cart</button>`}
             </div>
           `;
-          row.querySelector('.add-cart-btn').dataset.productId = p.id;
+          const cartBtn = row.querySelector('.add-cart-btn');
+          if (cartBtn) cartBtn.dataset.productId = p.id;
           row.querySelector('h3').textContent = p.name;
           row.querySelector('.product-price').textContent = p.price_display;
 
@@ -108,10 +108,9 @@
             descEl.textContent = p.description;
           }
 
-          // Tag product with no_quantity if section says so
-          const productWithMeta = Object.assign({}, p, s.no_quantity ? { no_quantity: true } : {});
+          const productWithMeta = Object.assign({}, p, noQty ? { no_quantity: true } : {});
           row.querySelector('.buy-btn').addEventListener('click', () => buy(productWithMeta));
-          row.querySelector('.add-cart-btn').addEventListener('click', () => addToCart(productWithMeta));
+          if (cartBtn) cartBtn.addEventListener('click', () => addToCart(productWithMeta));
           products.appendChild(row);
         }
 

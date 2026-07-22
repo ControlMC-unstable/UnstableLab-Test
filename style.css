@@ -400,20 +400,21 @@ header p {
 }
 
 .product .add-cart-btn {
-  display: grid; place-items: center;
-  width: 36px; height: 36px;
-  border-radius: 8px;
+  background: none;
   border: 1px solid var(--border);
-  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  padding: 8px 14px;
   color: var(--muted);
+  font: inherit; font-weight: 600; font-size: 12px;
   cursor: pointer;
+  white-space: nowrap;
   transition: all 0.2s;
   flex-shrink: 0;
 }
 .product .add-cart-btn:hover {
   color: #fff;
   border-color: rgba(255,255,255,0.15);
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.06);
 }
 .product .add-cart-btn.added {
   background: #059669 !important;
@@ -425,7 +426,7 @@ header p {
   cursor: not-allowed;
 }
 .product .add-cart-btn:disabled:hover {
-  background: rgba(255,255,255,0.04);
+  background: none;
   border-color: var(--border);
   color: #333;
 }
