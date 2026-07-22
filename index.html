@@ -42,6 +42,12 @@
   <script>
     function renderSections() {
       const container = document.getElementById('sections');
+      // Remember which sections are open
+      const openSections = new Set();
+      container.querySelectorAll('.section-drop.open').forEach(el => {
+        const id = el.dataset.sectionId;
+        if (id) openSections.add(id);
+      });
       container.innerHTML = '';
       const sections = (STATE.data && STATE.data.sections) || [];
       const hasUser = isValidUsername(STATE.username);
@@ -49,6 +55,8 @@
       for (const s of sections) {
         const drop = document.createElement('div');
         drop.className = 'section-drop';
+        drop.dataset.sectionId = s.id;
+        if (openSections.has(s.id)) drop.classList.add('open');
 
         // Toggle button
         const toggle = document.createElement('button');
