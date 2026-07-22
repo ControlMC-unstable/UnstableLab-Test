@@ -30,12 +30,29 @@ body {
   width: 900px; height: 900px;
   top: -400px; left: 50%;
   transform: translateX(-50%);
-  background: radial-gradient(circle, rgba(168,85,247,0.07) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(168,85,247,0.08) 0%, transparent 70%);
   animation: glow-pulse 8s ease-in-out infinite alternate;
+}
+.bg-glow::after {
+  content: "";
+  position: absolute;
+  width: 600px; height: 600px;
+  bottom: -200px; right: -100px;
+  background: radial-gradient(circle, rgba(99,102,241,0.05) 0%, transparent 70%);
+  animation: glow-pulse 10s ease-in-out infinite alternate-reverse;
 }
 @keyframes glow-pulse {
   0% { opacity: 0.5; transform: translateX(-50%) scale(1); }
   100% { opacity: 1; transform: translateX(-50%) scale(1.15); }
+}
+
+/* Grain overlay */
+.grain {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px;
 }
 
 /* ===== Top bar ===== */
@@ -108,8 +125,13 @@ header {
   margin: 0 auto 24px;
   display: block;
   transition: transform 0.4s ease;
+  animation: float 6s ease-in-out infinite;
 }
 .logo:hover { transform: scale(1.08) rotate(-2deg); }
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
 header h1 {
   font-size: 48px;
   font-weight: 700;
@@ -133,10 +155,11 @@ header p {
   margin: 0 auto 32px;
   display: flex; gap: 14px; align-items: center;
   flex-wrap: wrap;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 .username-card:focus-within {
   border-color: rgba(168,85,247,0.2);
+  box-shadow: 0 0 24px rgba(168,85,247,0.04);
 }
 .username-card label {
   color: var(--muted); font-size: 11px; font-weight: 600;
@@ -156,7 +179,10 @@ header p {
   border-color: var(--accent);
   box-shadow: 0 0 0 2px rgba(168,85,247,0.12), 0 0 20px rgba(168,85,247,0.06);
 }
-.username-card .status { font-size: 11px; color: var(--muted); font-weight: 500; transition: color 0.3s; }
+.username-card .status {
+  font-size: 11px; color: var(--muted); font-weight: 500;
+  transition: color 0.3s;
+}
 .username-card .status.saved { color: #34d399; }
 
 .head {
@@ -169,14 +195,21 @@ header p {
   display: grid; place-items: center;
   color: var(--muted); font-size: 18px;
   overflow: hidden;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, transform 0.3s;
 }
 .head img {
   width: 100%; height: 100%; display: block;
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
 }
-.head.loading { opacity: 0.5; }
+.head.loading {
+  opacity: 0.5;
+  animation: head-loading 1s ease-in-out infinite alternate;
+}
+@keyframes head-loading {
+  0% { opacity: 0.3; }
+  100% { opacity: 0.6; }
+}
 
 /* ===== Accordion sections ===== */
 .sections {
@@ -190,7 +223,7 @@ header p {
   border-radius: 12px;
   background: var(--surface);
   overflow: hidden;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
 }
 .section-drop:hover {
   border-color: rgba(255,255,255,0.08);
@@ -198,6 +231,7 @@ header p {
 .section-drop.open {
   border-color: rgba(168,85,247,0.15);
   box-shadow: 0 4px 32px rgba(168,85,247,0.04);
+  background: rgba(255,255,255,0.02);
 }
 
 .section-toggle {
@@ -226,6 +260,12 @@ header p {
   transform: scale(1.15);
 }
 .section-toggle .section-info { flex: 1; }
+.section-toggle .section-info strong {
+  transition: color 0.2s;
+}
+.section-drop.open .section-toggle .section-info strong {
+  color: #fff;
+}
 .section-toggle .section-info span {
   display: block;
   color: var(--muted); font-size: 12px; font-weight: 400;
@@ -250,8 +290,15 @@ header p {
   max-height: 2000px;
 }
 
+/* Divider line between toggle and products */
+.section-divider {
+  height: 1px;
+  margin: 0 20px;
+  background: var(--border);
+}
+
 .section-products {
-  padding: 4px 20px 20px;
+  padding: 12px 20px 20px;
   display: flex; flex-direction: column;
   gap: 6px;
 }
@@ -265,12 +312,13 @@ header p {
   background: rgba(0,0,0,0.2);
   border: 1px solid var(--border);
   border-radius: 10px;
-  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s, background 0.2s;
 }
 .product:hover {
-  border-color: rgba(255,255,255,0.1);
+  border-color: rgba(168,85,247,0.15);
   transform: translateX(4px);
   box-shadow: -4px 0 0 var(--accent);
+  background: rgba(168,85,247,0.03);
 }
 .product-info {
   flex: 1; min-width: 0;
@@ -278,6 +326,10 @@ header p {
 .product-info h3 {
   font-size: 15px; font-weight: 600;
   margin-bottom: 2px;
+  color: #fff;
+  transition: color 0.2s;
+}
+.product:hover .product-info h3 {
   color: #fff;
 }
 .product-info .desc {
@@ -292,6 +344,10 @@ header p {
 .product-info .desc ul li {
   font-size: 12px;
   color: var(--muted);
+  transition: color 0.2s;
+}
+.product:hover .product-info .desc ul li {
+  color: #999;
 }
 .product-info .desc ul li::before {
   content: "·";
@@ -305,6 +361,10 @@ header p {
   font-weight: 700; font-size: 16px;
   color: #fff;
   white-space: nowrap;
+  transition: color 0.2s;
+}
+.product:hover .product-price {
+  color: var(--accent);
 }
 
 .product button {
@@ -317,11 +377,14 @@ header p {
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
 }
 .product button:hover {
   background: var(--accent);
   color: #fff;
-  box-shadow: 0 4px 16px rgba(168,85,247,0.3);
+  box-shadow: 0 4px 20px rgba(168,85,247,0.35);
+  transform: scale(1.04);
 }
 .product button:active { transform: scale(0.95); }
 .product button:disabled {
@@ -331,7 +394,28 @@ header p {
 }
 .product button:disabled:hover {
   background: rgba(255,255,255,0.06); color: #555;
-  box-shadow: none;
+  box-shadow: none; transform: none;
+}
+
+/* ===== Stagger animation for products appearing ===== */
+.product {
+  animation: slide-in 0.3s ease both;
+}
+.product:nth-child(1) { animation-delay: 0s; }
+.product:nth-child(2) { animation-delay: 0.04s; }
+.product:nth-child(3) { animation-delay: 0.08s; }
+.product:nth-child(4) { animation-delay: 0.12s; }
+.product:nth-child(5) { animation-delay: 0.16s; }
+.product:nth-child(6) { animation-delay: 0.2s; }
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ===== Section header (for section.html / terms.html) ===== */

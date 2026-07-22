@@ -106,6 +106,9 @@
           products.appendChild(row);
         }
 
+        const divider = document.createElement('div');
+        divider.className = 'section-divider';
+        body.appendChild(divider);
         body.appendChild(products);
         drop.appendChild(toggle);
         drop.appendChild(body);

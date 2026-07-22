@@ -72,11 +72,14 @@ function wireCopyButton(btn, text) {
   document.body.insertBefore(bar, document.body.firstChild);
 })();
 
-// ===== Subtle background glow =====
+// ===== Subtle background glow + grain =====
 (function installBackground() {
   const glow = document.createElement('div');
   glow.className = 'bg-glow';
   document.body.insertBefore(glow, document.body.firstChild);
+  const grain = document.createElement('div');
+  grain.className = 'grain';
+  document.body.insertBefore(grain, glow.nextSibling);
 })();
 
 function showError(msg) {
