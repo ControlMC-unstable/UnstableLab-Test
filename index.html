@@ -99,7 +99,8 @@
             <div class="product-actions">
               ${inCart
                 ? (noQty
-                  ? `<button class="add-cart-btn in-cart" disabled>Added to Cart</button>`
+                  ? `<button class="add-cart-btn in-cart" disabled>Added to Cart</button>
+                     <button class="inline-remove-btn" aria-label="Remove">✕</button>`
                   : `<div class="inline-qty">
                        <button class="inline-qty-btn" data-dir="-1">−</button>
                        <span class="inline-qty-val">${inCart.qty || 1}</span>
@@ -128,7 +129,16 @@
 
           const productWithMeta = Object.assign({}, p, noQty ? { no_quantity: true } : {});
 
-          if (inCart && !noQty) {
+          if (inCart && noQty) {
+            // Wire up X remove button for ranks
+            const removeBtn = row.querySelector('.inline-remove-btn');
+            if (removeBtn) {
+              removeBtn.addEventListener('click', () => {
+                removeFromCart(p.id);
+                renderSections();
+              });
+            }
+          } else if (inCart && !noQty) {
             // Wire up +/- buttons
             row.querySelectorAll('.inline-qty-btn').forEach(btn => {
               btn.addEventListener('click', () => {
