@@ -72,30 +72,33 @@ function wireCopyButton(btn, text) {
   document.body.insertBefore(bar, document.body.firstChild);
 })();
 
-// ===== Background effects =====
-// Injects the fixed background layers so we don't have to duplicate them in
-// every HTML file, and wires up the cursor-following spotlight/magnifier.
+// ===== Aurora background + grain =====
+// Injects the animated aurora blobs and grain texture overlay.
 (function installBackground() {
-  const layers = ['bg-fallback', 'bg', 'bg-zoom', 'bg-overlay', 'spotlight'];
-  for (const cls of layers) {
-    const el = document.createElement('div');
-    el.className = cls;
-    // Insert at the very start so the IP bar (added earlier) stays on top of them.
-    document.body.insertBefore(el, document.body.firstChild);
+  const aurora = document.createElement('div');
+  aurora.className = 'aurora';
+  for (let i = 0; i < 3; i++) {
+    const blob = document.createElement('div');
+    blob.className = 'aurora-blob';
+    aurora.appendChild(blob);
   }
+  document.body.insertBefore(aurora, document.body.firstChild);
 
-  // Throttle mousemove with requestAnimationFrame so we don't thrash on
-  // high-refresh-rate mice.
-  let pendingX = null, pendingY = null, rafPending = false;
-  function flush() {
-    document.documentElement.style.setProperty('--mx', pendingX + 'px');
-    document.documentElement.style.setProperty('--my', pendingY + 'px');
-    rafPending = false;
-  }
-  window.addEventListener('mousemove', e => {
-    pendingX = e.clientX;
-    pendingY = e.clientY;
-    if (!rafPending) { rafPending = true; requestAnimationFrame(flush); }
+  const grain = document.createElement('div');
+  grain.className = 'grain';
+  document.body.insertBefore(grain, aurora.nextSibling);
+})();
+
+// ===== Card mouse-tracking glow =====
+// Sets --card-mx / --card-my on each card so the radial-gradient
+// highlight follows the cursor.
+(function installCardGlow() {
+  document.addEventListener('mousemove', e => {
+    const card = e.target.closest('.card, .section-card');
+    if (!card) return;
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--card-mx', (e.clientX - r.left) + 'px');
+    card.style.setProperty('--card-my', (e.clientY - r.top) + 'px');
   }, { passive: true });
 })();
 
