@@ -591,6 +591,20 @@ header p {
 }
 
 /* Cart footer bar */
+.cart-subtotal {
+  text-align: right;
+  padding: 16px 0;
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 1.1rem;
+  color: var(--muted);
+}
+.cart-subtotal span {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-left: 8px;
+}
 .cart-footer-bar {
   display: flex; gap: 10px;
   margin-top: 16px;
