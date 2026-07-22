@@ -87,11 +87,10 @@
             <div class="product-price"></div>
             <div class="product-actions">
               <button class="buy-btn" ${hasUser ? '' : 'disabled'}>${hasUser ? 'Buy' : 'Enter username'}</button>
-              ${noQty ? '' : `<button class="add-cart-btn" data-product-id="" ${hasUser ? '' : 'disabled'}>Add to Cart</button>`}
+              <button class="add-cart-btn" data-product-id="" ${hasUser ? '' : 'disabled'}>Add to Cart</button>
             </div>
           `;
-          const cartBtn = row.querySelector('.add-cart-btn');
-          if (cartBtn) cartBtn.dataset.productId = p.id;
+          row.querySelector('.add-cart-btn').dataset.productId = p.id;
           row.querySelector('h3').textContent = p.name;
           row.querySelector('.product-price').textContent = p.price_display;
 
@@ -110,7 +109,7 @@
 
           const productWithMeta = Object.assign({}, p, noQty ? { no_quantity: true } : {});
           row.querySelector('.buy-btn').addEventListener('click', () => buy(productWithMeta));
-          if (cartBtn) cartBtn.addEventListener('click', () => addToCart(productWithMeta));
+          row.querySelector('.add-cart-btn').addEventListener('click', () => addToCart(productWithMeta));
           products.appendChild(row);
         }
 

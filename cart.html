@@ -29,6 +29,12 @@
     </div>
 
     <div id="cart-items"></div>
+
+    <div id="cart-footer-bar" class="cart-footer-bar" hidden>
+      <button id="checkout-all-btn" class="checkout-all-btn" disabled>Checkout All</button>
+      <button id="clear-cart-btn" class="clear-cart-btn">Clear Cart</button>
+    </div>
+
     <div id="cart-empty" class="cart-empty" hidden>
       <p>Your cart is empty.</p>
       <a href="index.html" class="cart-empty-link">Browse the store →</a>
@@ -47,18 +53,24 @@
     function renderCart() {
       const container = document.getElementById('cart-items');
       const emptyEl = document.getElementById('cart-empty');
+      const footerBar = document.getElementById('cart-footer-bar');
       const cart = getCart();
       container.innerHTML = '';
 
       if (cart.length === 0) {
         emptyEl.hidden = false;
         container.hidden = true;
+        footerBar.hidden = true;
         return;
       }
       emptyEl.hidden = true;
       container.hidden = false;
+      footerBar.hidden = false;
 
       const hasUser = isValidUsername(STATE.username);
+      const checkoutAllBtn = document.getElementById('checkout-all-btn');
+      checkoutAllBtn.disabled = !hasUser;
+      checkoutAllBtn.textContent = hasUser ? 'Checkout All' : 'Enter username first';
 
       for (const item of cart) {
         const row = document.createElement('div');
@@ -68,24 +80,20 @@
             <h3></h3>
             <div class="cart-item-desc"></div>
           </div>
+          ${item.no_quantity ? '' : `
           <div class="cart-item-qty">
             <button class="qty-btn" data-dir="-1">−</button>
             <span class="qty-val"></span>
             <button class="qty-btn" data-dir="1">+</button>
-          </div>
+          </div>`}
           <div class="cart-item-price"></div>
-          <button class="cart-checkout-btn" ${hasUser ? '' : 'disabled'}>${hasUser ? 'Checkout' : 'Enter username'}</button>
           <button class="cart-remove-btn" aria-label="Remove">✕</button>
         `;
 
         row.querySelector('h3').textContent = item.name;
         row.querySelector('.cart-item-price').textContent = item.price_display;
-        row.querySelector('.qty-val').textContent = item.qty || 1;
-
-        // Hide qty controls for items that don't allow quantity
-        if (item.no_quantity) {
-          row.querySelector('.cart-item-qty').style.display = 'none';
-        }
+        const qtyEl = row.querySelector('.qty-val');
+        if (qtyEl) qtyEl.textContent = item.qty || 1;
 
         const descEl = row.querySelector('.cart-item-desc');
         if (Array.isArray(item.description) && item.description.length) {
@@ -102,11 +110,6 @@
           });
         });
 
-        // Checkout button — goes to Stripe
-        row.querySelector('.cart-checkout-btn').addEventListener('click', () => {
-          buy(item);
-        });
-
         // Remove button
         row.querySelector('.cart-remove-btn').addEventListener('click', () => {
           removeFromCart(item.id);
@@ -116,6 +119,81 @@
         container.appendChild(row);
       }
     }
+
+    // Checkout All — sends cart to worker, which creates a Stripe Checkout Session
+    document.getElementById('checkout-all-btn').addEventListener('click', async () => {
+      if (!isValidUsername(STATE.username)) {
+        showError('Enter a valid username first.');
+        return;
+      }
+      const cart = getCart();
+      if (cart.length === 0) return;
+
+      const btn = document.getElementById('checkout-all-btn');
+      btn.disabled = true;
+      btn.textContent = 'Redirecting…';
+
+      // We need price_ids — look them up from products.json data
+      const allProducts = {};
+      for (const section of (STATE.data.sections || [])) {
+        for (const p of (section.products || [])) {
+          allProducts[p.id] = p;
+        }
+      }
+
+      const items = cart.map(ci => ({
+        id: ci.id,
+        price_id: allProducts[ci.id]?.price_id || '',
+        qty: ci.qty || 1,
+      }));
+
+      // Check all price_ids are filled in
+      const missing = items.find(i => !i.price_id || i.price_id.includes('REPLACE'));
+      if (missing) {
+        showError('Cart checkout is not configured yet. Use the Buy button on each item instead.');
+        btn.disabled = false;
+        btn.textContent = 'Checkout All';
+        return;
+      }
+
+      const checkoutUrl = STATE.data.checkout_url;
+      if (!checkoutUrl || checkoutUrl.includes('YOUR_WORKER')) {
+        showError('Cart checkout URL is not configured yet. Use the Buy button on each item instead.');
+        btn.disabled = false;
+        btn.textContent = 'Checkout All';
+        return;
+      }
+
+      try {
+        const res = await fetch(checkoutUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: STATE.username,
+            items,
+            success_url: window.location.origin,
+            cancel_url: window.location.origin,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.url) {
+          throw new Error(data.error || 'Failed to create checkout');
+        }
+        // Clear cart before redirecting
+        saveCart([]);
+        window.location.href = data.url;
+      } catch (e) {
+        showError('Checkout failed: ' + e.message);
+        btn.disabled = false;
+        btn.textContent = 'Checkout All';
+      }
+    });
+
+    // Clear cart button
+    document.getElementById('clear-cart-btn').addEventListener('click', () => {
+      saveCart([]);
+      renderCart();
+    });
 
     // Re-render when username changes
     const _origSaveUsername = saveUsername;

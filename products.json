@@ -2,6 +2,7 @@
   "server_name": "Unstable Lab Store",
   "server_tagline": "Ranks, cosmetics, and dangerously fun perks. Delivered in-game within a minute.",
   "accent_color": "#8b5cf6",
+  "checkout_url": "https://unstablelabstore.cadenjohnson6812.workers.dev/checkout",
   "sections": [
     {
       "id": "money",
@@ -14,6 +15,7 @@
           "name": "$5,000",
           "description": "",
           "price_display": "$1.99",
+          "price_id": "price_1TvRxJCcqJJ5hDAzOgRVJoAp",
           "payment_link": "https://buy.stripe.com/00wcN4cB92Tl1RQeVDeQM03"
         },
         {
@@ -21,6 +23,7 @@
           "name": "$10,000",
           "description": "",
           "price_display": "$3.99",
+          "price_id": "price_1TvRxgCcqJJ5hDAzETGL8dq9",
           "payment_link": "https://buy.stripe.com/7sYfZg30z79BdAydRzeQM04"
         }
       ]
@@ -44,6 +47,7 @@
             "1.25x Cash Multiplier"
           ],
           "price_display": "$2.99",
+          "price_id": "price_1TvQzDCcqJJ5hDAzRaQR4I3y",
           "payment_link": "https://buy.stripe.com/28E8wO8kT79B1RQaFneQM01"
         },
         {
@@ -57,6 +61,7 @@
             "Custom Changeable Tag"
           ],
           "price_display": "$4.99",
+          "price_id": "price_1TvQznCcqJJ5hDAzI3h1f0Eb",
           "payment_link": "https://buy.stripe.com/eVq3cu0SrbpRdAy5l3eQM02"
         }
       ]
@@ -72,6 +77,7 @@
           "name": "1x Fireworks Crate Key",
           "description": "",
           "price_display": "$0.99",
+          "price_id": "price_1TvRycCcqJJ5hDAzBsIgZUtp",
           "payment_link": "https://buy.stripe.com/eVqfZg44D2Tl6868xfeQM05"
         },
         {
@@ -79,6 +85,7 @@
           "name": "3x Fireworks Crate Key",
           "description": "",
           "price_display": "$2.49",
+          "price_id": "price_1TvRyxCcqJJ5hDAzIp0u9WU8",
           "payment_link": "https://buy.stripe.com/eVq28qgRpeC3542bJreQM06"
         },
         {
@@ -86,6 +93,7 @@
           "name": "6x Fireworks Crate Key",
           "description": "",
           "price_display": "$4.49",
+          "price_id": "price_1TvRzNCcqJJ5hDAzoeZarVyp",
           "payment_link": "https://buy.stripe.com/aFaaEW8kT0LdeEC5l3eQM07"
         },
         {
@@ -93,6 +101,7 @@
           "name": "1x Maces Crate Key",
           "description": "",
           "price_display": "$0.99",
+          "price_id": "price_1TvRzlCcqJJ5hDAzJ2lIzOIS",
           "payment_link": "https://buy.stripe.com/dRmfZg9oX8dFbsqeVDeQM08"
         },
         {
@@ -100,6 +109,7 @@
           "name": "3x Maces Crate Key",
           "description": "",
           "price_display": "$2.49",
+          "price_id": "price_1TvS09CcqJJ5hDAzUTPzPY1a",
           "payment_link": "https://buy.stripe.com/aFacN47gP8dF2VU00JeQM09"
         },
         {
@@ -107,6 +117,7 @@
           "name": "6x Maces Crate Key",
           "description": "",
           "price_display": "$4.49",
+          "price_id": "price_1TvS0XCcqJJ5hDAzcD2d4mU8",
           "payment_link": "https://buy.stripe.com/aFa3cu44DalN1RQ28ReQM0a"
         }
       ]
