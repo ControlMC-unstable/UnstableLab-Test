@@ -421,14 +421,52 @@ header p {
   border-color: #059669 !important;
   color: #fff !important;
 }
-.product .add-cart-btn:disabled {
+.product .add-cart-btn.in-cart {
+  background: rgba(5, 150, 105, 0.15);
+  border-color: #059669;
+  color: #34d399;
+  cursor: default;
+}
+.product .add-cart-btn.in-cart:hover {
+  background: rgba(5, 150, 105, 0.15);
+  border-color: #059669;
+  color: #34d399;
+}
+.product .add-cart-btn:disabled:not(.in-cart) {
   color: #333;
   cursor: not-allowed;
 }
-.product .add-cart-btn:disabled:hover {
+.product .add-cart-btn:disabled:not(.in-cart):hover {
   background: none;
   border-color: var(--border);
   color: #333;
+}
+.inline-qty {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.inline-qty-btn {
+  width: 28px; height: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.inline-qty-btn:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.15);
+}
+.inline-qty-val {
+  min-width: 20px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
 }
 
 /* ===== Stagger animation for products appearing ===== */
