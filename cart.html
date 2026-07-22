@@ -91,9 +91,12 @@
         `;
 
         row.querySelector('h3').textContent = item.name;
-        row.querySelector('.cart-item-price').textContent = item.price_display;
+        const qty = item.qty || 1;
+        const unitPrice = parseFloat(item.price_display.replace('$', ''));
+        const totalPrice = (unitPrice * qty).toFixed(2);
+        row.querySelector('.cart-item-price').textContent = '$' + totalPrice;
         const qtyEl = row.querySelector('.qty-val');
-        if (qtyEl) qtyEl.textContent = item.qty || 1;
+        if (qtyEl) qtyEl.textContent = qty;
 
         const descEl = row.querySelector('.cart-item-desc');
         if (Array.isArray(item.description) && item.description.length) {
