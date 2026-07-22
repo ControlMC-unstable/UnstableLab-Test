@@ -72,35 +72,7 @@ function wireCopyButton(btn, text) {
   document.body.insertBefore(bar, document.body.firstChild);
 })();
 
-// ===== Aurora background + grain =====
-// Injects the animated aurora blobs and grain texture overlay.
-(function installBackground() {
-  const aurora = document.createElement('div');
-  aurora.className = 'aurora';
-  for (let i = 0; i < 3; i++) {
-    const blob = document.createElement('div');
-    blob.className = 'aurora-blob';
-    aurora.appendChild(blob);
-  }
-  document.body.insertBefore(aurora, document.body.firstChild);
-
-  const grain = document.createElement('div');
-  grain.className = 'grain';
-  document.body.insertBefore(grain, aurora.nextSibling);
-})();
-
-// ===== Card mouse-tracking glow =====
-// Sets --card-mx / --card-my on each card so the radial-gradient
-// highlight follows the cursor.
-(function installCardGlow() {
-  document.addEventListener('mousemove', e => {
-    const card = e.target.closest('.card, .section-card');
-    if (!card) return;
-    const r = card.getBoundingClientRect();
-    card.style.setProperty('--card-mx', (e.clientX - r.left) + 'px');
-    card.style.setProperty('--card-my', (e.clientY - r.top) + 'px');
-  }, { passive: true });
-})();
+// ===== No background effects =====
 
 function showError(msg) {
   const el = document.getElementById('error');

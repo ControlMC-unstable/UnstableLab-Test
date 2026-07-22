@@ -8,14 +8,14 @@
   <meta http-equiv="Expires" content="0">
   <title>Unstable Lab Store</title>
   <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
   <div class="wrap">
     <header>
       <img class="logo" id="logo" src="logo.svg" alt="Unstable Lab"
            onerror="this.style.display='none';">
-      <h1 id="server-name"><span class="gradient">Unstable Lab</span> Store</h1>
+      <h1 id="server-name">Unstable Lab Store</h1>
       <p id="server-tagline">Loading…</p>
     </header>
 
@@ -38,28 +38,87 @@
     </footer>
   </div>
 
-  <script src="shop.js?v=7"></script>
+  <script src="shop.js?v=8"></script>
   <script>
     function renderSections() {
       const container = document.getElementById('sections');
       container.innerHTML = '';
       const sections = (STATE.data && STATE.data.sections) || [];
+      const hasUser = isValidUsername(STATE.username);
+
       for (const s of sections) {
-        const a = document.createElement('a');
-        a.className = 'section-card';
-        a.href = `section.html?id=${encodeURIComponent(s.id)}`;
-        a.innerHTML = `
+        const drop = document.createElement('div');
+        drop.className = 'section-drop';
+
+        // Toggle button
+        const toggle = document.createElement('button');
+        toggle.className = 'section-toggle';
+        toggle.type = 'button';
+        toggle.innerHTML = `
           <div class="icon"></div>
-          <h2></h2>
-          <p></p>
-          <div class="cta">Browse →</div>
+          <div class="section-info">
+            <strong></strong>
+            <span></span>
+          </div>
+          <div class="chevron">▾</div>
         `;
-        a.querySelector('.icon').textContent = s.icon || '📦';
-        a.querySelector('h2').textContent = s.name;
-        a.querySelector('p').textContent = s.description || '';
-        container.appendChild(a);
+        toggle.querySelector('.icon').textContent = s.icon || '📦';
+        toggle.querySelector('strong').textContent = s.name;
+        toggle.querySelector('span').textContent = s.description || '';
+        toggle.addEventListener('click', () => {
+          drop.classList.toggle('open');
+        });
+
+        // Products body
+        const body = document.createElement('div');
+        body.className = 'section-body';
+        const products = document.createElement('div');
+        products.className = 'section-products';
+
+        for (const p of (s.products || [])) {
+          const row = document.createElement('div');
+          row.className = 'product';
+          row.innerHTML = `
+            <div class="product-info">
+              <h3></h3>
+              <div class="desc"></div>
+            </div>
+            <div class="product-price"></div>
+            <button ${hasUser ? '' : 'disabled'}>${hasUser ? 'Buy' : 'Enter username'}</button>
+          `;
+          row.querySelector('h3').textContent = p.name;
+          row.querySelector('.product-price').textContent = p.price_display;
+
+          const descEl = row.querySelector('.desc');
+          if (Array.isArray(p.description) && p.description.length) {
+            const ul = document.createElement('ul');
+            for (const item of p.description) {
+              const li = document.createElement('li');
+              li.textContent = item;
+              ul.appendChild(li);
+            }
+            descEl.appendChild(ul);
+          } else if (p.description) {
+            descEl.textContent = p.description;
+          }
+
+          row.querySelector('button').addEventListener('click', () => buy(p));
+          products.appendChild(row);
+        }
+
+        body.appendChild(products);
+        drop.appendChild(toggle);
+        drop.appendChild(body);
+        container.appendChild(drop);
       }
     }
+
+    // Re-render when username changes so buy buttons update
+    const _origSaveUsername = saveUsername;
+    saveUsername = function(name) {
+      _origSaveUsername(name);
+      if (STATE.data) renderSections();
+    };
 
     loadData().then(data => {
       if (data) renderSections();
