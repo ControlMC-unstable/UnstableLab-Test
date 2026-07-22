@@ -153,6 +153,84 @@ function buy(product) {
   window.location.href = url.toString();
 }
 
+// ===== Cart =====
+function getCart() {
+  try { return JSON.parse(localStorage.getItem('cart') || '[]'); } catch (_) { return []; }
+}
+function saveCart(cart) {
+  try { localStorage.setItem('cart', JSON.stringify(cart)); } catch (_) {}
+  updateCartBadge();
+}
+function addToCart(product) {
+  const cart = getCart();
+  const existing = cart.find(i => i.id === product.id);
+  if (existing) {
+    existing.qty = (existing.qty || 1) + 1;
+  } else {
+    cart.push({
+      id: product.id,
+      name: product.name,
+      price_display: product.price_display,
+      payment_link: product.payment_link,
+      description: product.description,
+      qty: 1
+    });
+  }
+  saveCart(cart);
+  // Brief feedback on the button
+  const btn = document.querySelector(`[data-product-id="${product.id}"]`);
+  if (btn) {
+    const orig = btn.textContent;
+    btn.textContent = 'Added!';
+    btn.classList.add('added');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('added'); }, 800);
+  }
+}
+function removeFromCart(productId) {
+  saveCart(getCart().filter(i => i.id !== productId));
+}
+function updateCartQty(productId, delta) {
+  const cart = getCart();
+  const item = cart.find(i => i.id === productId);
+  if (!item) return;
+  item.qty = Math.max(1, (item.qty || 1) + delta);
+  saveCart(cart);
+}
+function updateCartBadge() {
+  const badge = document.getElementById('cart-badge');
+  if (!badge) return;
+  const count = getCart().reduce((sum, i) => sum + (i.qty || 1), 0);
+  badge.textContent = count;
+  badge.hidden = count === 0;
+}
+
+// ===== Cart button (injected next to username card) =====
+(function installCartButton() {
+  // Wait for DOM
+  function inject() {
+    const card = document.querySelector('.username-card');
+    if (!card) return;
+    const btn = document.createElement('a');
+    btn.href = 'cart.html';
+    btn.className = 'cart-btn';
+    btn.setAttribute('aria-label', 'View cart');
+    btn.innerHTML = `
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+      </svg>
+      <span class="cart-badge" id="cart-badge" hidden>0</span>
+    `;
+    card.appendChild(btn);
+    updateCartBadge();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inject);
+  } else {
+    inject();
+  }
+})();
+
 async function loadData() {
   try {
     const res = await fetch('products.json', { cache: 'no-cache' });

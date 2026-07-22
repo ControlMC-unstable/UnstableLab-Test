@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Your Cart — Unstable Lab Store</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="style.css?v=9">
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="index.html">← Back to store</a>
+
+    <div class="section-header">
+      <h1>Your Cart</h1>
+      <p id="cart-subtitle">Review your items and check out below.</p>
+    </div>
+
+    <div id="error" class="error" hidden></div>
+
+    <div class="username-card">
+      <div class="head" id="head" aria-hidden="true">?</div>
+      <label for="username">Minecraft username:</label>
+      <input id="username" type="text" placeholder="e.g. Steve" autocomplete="off" spellcheck="false">
+      <span class="status" id="status">Enter your username to enable purchases.</span>
+    </div>
+
+    <div id="cart-items"></div>
+    <div id="cart-empty" class="cart-empty" hidden>
+      <p>Your cart is empty.</p>
+      <a href="index.html" class="cart-empty-link">Browse the store →</a>
+    </div>
+
+    <footer>
+      Payments handled securely by Stripe. Your purchase is delivered in-game within about a minute of payment.
+      <div class="footer-links">
+        <a href="terms.html">Terms of Service</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="shop.js?v=9"></script>
+  <script>
+    function renderCart() {
+      const container = document.getElementById('cart-items');
+      const emptyEl = document.getElementById('cart-empty');
+      const cart = getCart();
+      container.innerHTML = '';
+
+      if (cart.length === 0) {
+        emptyEl.hidden = false;
+        container.hidden = true;
+        return;
+      }
+      emptyEl.hidden = true;
+      container.hidden = false;
+
+      const hasUser = isValidUsername(STATE.username);
+
+      for (const item of cart) {
+        const row = document.createElement('div');
+        row.className = 'cart-item';
+        row.innerHTML = `
+          <div class="cart-item-info">
+            <h3></h3>
+            <div class="cart-item-desc"></div>
+          </div>
+          <div class="cart-item-qty">
+            <button class="qty-btn" data-dir="-1">−</button>
+            <span class="qty-val"></span>
+            <button class="qty-btn" data-dir="1">+</button>
+          </div>
+          <div class="cart-item-price"></div>
+          <button class="cart-checkout-btn" ${hasUser ? '' : 'disabled'}>${hasUser ? 'Checkout' : 'Enter username'}</button>
+          <button class="cart-remove-btn" aria-label="Remove">✕</button>
+        `;
+
+        row.querySelector('h3').textContent = item.name;
+        row.querySelector('.cart-item-price').textContent = item.price_display;
+        row.querySelector('.qty-val').textContent = item.qty || 1;
+
+        const descEl = row.querySelector('.cart-item-desc');
+        if (Array.isArray(item.description) && item.description.length) {
+          descEl.textContent = item.description.join(' · ');
+        } else if (item.description) {
+          descEl.textContent = item.description;
+        }
+
+        // Qty buttons
+        row.querySelectorAll('.qty-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            updateCartQty(item.id, parseInt(btn.dataset.dir));
+            renderCart();
+          });
+        });
+
+        // Checkout button — goes to Stripe
+        row.querySelector('.cart-checkout-btn').addEventListener('click', () => {
+          buy(item);
+        });
+
+        // Remove button
+        row.querySelector('.cart-remove-btn').addEventListener('click', () => {
+          removeFromCart(item.id);
+          renderCart();
+        });
+
+        container.appendChild(row);
+      }
+    }
+
+    // Re-render when username changes
+    const _origSaveUsername = saveUsername;
+    saveUsername = function(name) {
+      _origSaveUsername(name);
+      renderCart();
+    };
+
+    loadData().then(() => renderCart());
+  </script>
+</body>
+</html>

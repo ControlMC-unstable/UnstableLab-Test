@@ -418,6 +418,174 @@ header p {
   }
 }
 
+/* ===== Cart button ===== */
+.cart-btn {
+  position: relative;
+  display: grid; place-items: center;
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.cart-btn:hover {
+  color: #fff;
+  border-color: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+}
+.cart-badge {
+  position: absolute;
+  top: -5px; right: -5px;
+  min-width: 18px; height: 18px;
+  border-radius: 9px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 10px; font-weight: 700;
+  display: grid; place-items: center;
+  padding: 0 5px;
+  line-height: 1;
+  box-shadow: 0 2px 8px rgba(168,85,247,0.4);
+  animation: badge-pop 0.25s ease;
+}
+@keyframes badge-pop {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Add to cart button feedback */
+.add-cart-btn.added {
+  background: #059669 !important;
+  color: #fff !important;
+  border-color: #059669 !important;
+}
+
+/* ===== Cart page ===== */
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  transition: border-color 0.2s;
+}
+.cart-item:hover {
+  border-color: rgba(255,255,255,0.1);
+}
+.cart-item-info {
+  flex: 1; min-width: 0;
+}
+.cart-item-info h3 {
+  font-size: 15px; font-weight: 600; color: #fff;
+  margin-bottom: 2px;
+}
+.cart-item-desc {
+  font-size: 12px; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.cart-item-qty {
+  display: flex; align-items: center; gap: 8px;
+  flex-shrink: 0;
+}
+.qty-btn {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  font: inherit; font-size: 14px; font-weight: 700;
+  cursor: pointer;
+  display: grid; place-items: center;
+  transition: all 0.15s;
+}
+.qty-btn:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.12);
+}
+.qty-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700; font-size: 14px;
+  min-width: 20px; text-align: center;
+}
+
+.cart-item-price {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700; font-size: 16px;
+  color: #fff;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cart-checkout-btn {
+  background: #fff;
+  color: #000;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font: inherit; font-weight: 700; font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.cart-checkout-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(168,85,247,0.35);
+}
+.cart-checkout-btn:disabled {
+  background: rgba(255,255,255,0.06);
+  color: #555; cursor: not-allowed;
+}
+.cart-checkout-btn:disabled:hover {
+  box-shadow: none;
+}
+
+.cart-remove-btn {
+  background: none; border: none;
+  color: var(--muted);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.cart-remove-btn:hover {
+  color: #f87171;
+  background: rgba(248,113,113,0.1);
+}
+
+.cart-empty {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--muted);
+}
+.cart-empty p { font-size: 16px; margin-bottom: 12px; }
+.cart-empty-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+.cart-empty-link:hover { color: #fff; }
+
+@media (max-width: 600px) {
+  .cart-item { flex-wrap: wrap; gap: 10px; }
+  .cart-item-qty { order: 3; }
+  .cart-item-price { order: 2; }
+  .cart-checkout-btn { flex: 1; order: 4; }
+  .cart-remove-btn { order: 5; }
+}
+
 /* ===== Section header (for section.html / terms.html) ===== */
 .section-header { margin-bottom: 28px; text-align: center; padding-top: 40px; }
 .section-header h1 {

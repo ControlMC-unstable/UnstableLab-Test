@@ -8,7 +8,7 @@
   <meta http-equiv="Expires" content="0">
   <title>Unstable Lab Store</title>
   <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
   <div class="wrap">
@@ -38,7 +38,7 @@
     </footer>
   </div>
 
-  <script src="shop.js?v=8"></script>
+  <script src="shop.js?v=9"></script>
   <script>
     function renderSections() {
       const container = document.getElementById('sections');
@@ -84,8 +84,10 @@
               <div class="desc"></div>
             </div>
             <div class="product-price"></div>
-            <button ${hasUser ? '' : 'disabled'}>${hasUser ? 'Buy' : 'Enter username'}</button>
+            <button class="add-cart-btn" data-product-id="">${hasUser ? 'Add to Cart' : 'Enter username'}</button>
           `;
+          row.querySelector('.add-cart-btn').dataset.productId = p.id;
+          if (!hasUser) row.querySelector('.add-cart-btn').disabled = true;
           row.querySelector('h3').textContent = p.name;
           row.querySelector('.product-price').textContent = p.price_display;
 
@@ -102,7 +104,7 @@
             descEl.textContent = p.description;
           }
 
-          row.querySelector('button').addEventListener('click', () => buy(p));
+          row.querySelector('.add-cart-btn').addEventListener('click', () => addToCart(p));
           products.appendChild(row);
         }
 
