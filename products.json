@@ -30,6 +30,7 @@
       "name": "Ranks",
       "icon": "👑",
       "description": "Permanent perks and cosmetic titles.",
+      "no_quantity": true,
       "products": [
         {
           "id": "supporter",
@@ -42,7 +43,7 @@
             "/rename",
             "1.25x Cash Multiplier"
           ],
-          "price_display": "$1.99",
+          "price_display": "$2.99",
           "payment_link": "https://buy.stripe.com/28E8wO8kT79B1RQaFneQM01"
         },
         {

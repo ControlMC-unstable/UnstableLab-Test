@@ -82,6 +82,11 @@
         row.querySelector('.cart-item-price').textContent = item.price_display;
         row.querySelector('.qty-val').textContent = item.qty || 1;
 
+        // Hide qty controls for items that don't allow quantity
+        if (item.no_quantity) {
+          row.querySelector('.cart-item-qty').style.display = 'none';
+        }
+
         const descEl = row.querySelector('.cart-item-desc');
         if (Array.isArray(item.description) && item.description.length) {
           descEl.textContent = item.description.join(' · ');

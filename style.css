@@ -367,34 +367,67 @@ header p {
   color: var(--accent);
 }
 
-.product button {
+.product-actions {
+  display: flex; gap: 6px; align-items: center; flex-shrink: 0;
+}
+
+.product .buy-btn {
   background: #fff;
   color: #000;
   border: none;
-  padding: 8px 20px;
+  padding: 8px 18px;
   border-radius: 8px;
   font: inherit; font-weight: 700; font-size: 13px;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s;
-  position: relative;
-  overflow: hidden;
 }
-.product button:hover {
+.product .buy-btn:hover {
   background: var(--accent);
   color: #fff;
   box-shadow: 0 4px 20px rgba(168,85,247,0.35);
   transform: scale(1.04);
 }
-.product button:active { transform: scale(0.95); }
-.product button:disabled {
+.product .buy-btn:active { transform: scale(0.95); }
+.product .buy-btn:disabled {
   background: rgba(255,255,255,0.06);
   color: #555;
   cursor: not-allowed;
 }
-.product button:disabled:hover {
+.product .buy-btn:disabled:hover {
   background: rgba(255,255,255,0.06); color: #555;
   box-shadow: none; transform: none;
+}
+
+.product .add-cart-btn {
+  display: grid; place-items: center;
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.product .add-cart-btn:hover {
+  color: #fff;
+  border-color: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.08);
+}
+.product .add-cart-btn.added {
+  background: #059669 !important;
+  border-color: #059669 !important;
+  color: #fff !important;
+}
+.product .add-cart-btn:disabled {
+  color: #333;
+  cursor: not-allowed;
+}
+.product .add-cart-btn:disabled:hover {
+  background: rgba(255,255,255,0.04);
+  border-color: var(--border);
+  color: #333;
 }
 
 /* ===== Stagger animation for products appearing ===== */
@@ -454,13 +487,6 @@ header p {
   0% { transform: scale(0); }
   60% { transform: scale(1.2); }
   100% { transform: scale(1); }
-}
-
-/* Add to cart button feedback */
-.add-cart-btn.added {
-  background: #059669 !important;
-  color: #fff !important;
-  border-color: #059669 !important;
 }
 
 /* ===== Cart page ===== */
