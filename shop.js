@@ -179,14 +179,6 @@ function addToCart(product) {
     cart.push(entry);
   }
   saveCart(cart);
-  // Brief feedback on the button
-  const btn = document.querySelector(`[data-product-id="${product.id}"]`);
-  if (btn) {
-    const orig = btn.textContent;
-    btn.textContent = 'Added!';
-    btn.classList.add('added');
-    setTimeout(() => { btn.textContent = orig; btn.classList.remove('added'); }, 800);
-  }
 }
 function removeFromCart(productId) {
   saveCart(getCart().filter(i => i.id !== productId));
