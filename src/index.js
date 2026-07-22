@@ -33,6 +33,11 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
+    // Handle CORS preflight BEFORE anything else (including DB init)
+    if (path === '/checkout' && request.method === 'OPTIONS') {
+      return corsResponse();
+    }
+
     try {
       // Auto-create the orders table if it doesn't exist yet.
       await initDB(env);
@@ -50,13 +55,17 @@ export default {
       if (path === '/debug/fake-order' && request.method === 'POST') {
         return await handleFakeOrder(request, env);
       }
+      if (path === '/checkout' && request.method === 'POST') {
+        return await handleCheckout(request, env);
+      }
       if (path === '/' && request.method === 'GET') {
         return new Response('unstable-store worker OK', { status: 200 });
       }
       return new Response('not found', { status: 404 });
     } catch (e) {
       console.error(e);
-      return new Response('server error: ' + e.message, { status: 500 });
+      // Include CORS headers on errors so the browser can read the message
+      return corsJson({ error: 'server error: ' + e.message }, 500);
     }
   },
 };
@@ -95,6 +104,38 @@ async function handleStripeWebhook(request, env) {
 
   const session = event.data.object;
   const username = session.client_reference_id;
+
+  // Cart checkout — metadata.cart contains a JSON array of {id, qty}
+  if (session.metadata && session.metadata.source === 'cart_checkout' && session.metadata.cart) {
+    let cartItems;
+    try { cartItems = JSON.parse(session.metadata.cart); } catch (_) {
+      console.error('bad cart metadata');
+      return new Response('bad cart', { status: 200 });
+    }
+    if (!username) {
+      console.error('cart checkout missing username');
+      return new Response('missing username', { status: 200 });
+    }
+    for (let i = 0; i < cartItems.length; i++) {
+      const ci = cartItems[i];
+      if (!KNOWN_PRODUCTS.has(ci.id)) {
+        console.error('unknown product in cart', ci.id);
+        continue;
+      }
+      const orderId = session.id + '_item_' + i;
+      await env.DB.prepare(
+        `INSERT OR IGNORE INTO orders (id, username, product_id, quantity, amount_total, currency, created_at, source)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+      ).bind(
+        orderId, username, ci.id, ci.qty || 1,
+        0, session.currency || 'usd',
+        Date.now(), 'stripe_cart'
+      ).run();
+    }
+    return new Response('ok', { status: 200 });
+  }
+
+  // Single-item purchase via Payment Link
   let productId = session.metadata && session.metadata.product_id;
   let quantity = 1;
   if (!productId && session.payment_link) {
@@ -181,7 +222,102 @@ async function handleFakeOrder(request, env) {
   return jsonResponse({ ok: true, id });
 }
 
+// ===== Cart checkout — creates a Stripe Checkout Session =====
+async function handleCheckout(request, env) {
+  if (!env.STRIPE_SECRET_KEY) {
+    return corsJson({ error: 'Stripe secret key not configured' }, 500);
+  }
+
+  let body;
+  try { body = await request.json(); } catch (_) {
+    return corsJson({ error: 'invalid JSON' }, 400);
+  }
+
+  const { username, items } = body;
+  if (!username || !/^[a-zA-Z0-9_]{3,16}$/.test(username)) {
+    return corsJson({ error: 'invalid username' }, 400);
+  }
+  if (!Array.isArray(items) || items.length === 0 || items.length > 20) {
+    return corsJson({ error: 'items must be an array (1-20)' }, 400);
+  }
+
+  // Build Stripe line_items
+  const lineItems = [];
+  for (const item of items) {
+    if (!item.price_id || !item.price_id.startsWith('price_')) {
+      return corsJson({ error: `invalid price_id for ${item.id}` }, 400);
+    }
+    if (!KNOWN_PRODUCTS.has(item.id)) {
+      return corsJson({ error: `unknown product: ${item.id}` }, 400);
+    }
+    const qty = Math.max(1, Math.min(100, parseInt(item.qty) || 1));
+    lineItems.push({ price: item.price_id, quantity: qty });
+  }
+
+  // Build the metadata so the webhook can create one order per line item.
+  // We pack the cart into metadata as JSON.
+  const cartMeta = items.map(i => ({
+    id: i.id,
+    qty: Math.max(1, Math.min(100, parseInt(i.qty) || 1))
+  }));
+
+  // Create Stripe Checkout Session via API
+  const params = new URLSearchParams();
+  params.append('mode', 'payment');
+  params.append('client_reference_id', username);
+  params.append('success_url', (body.success_url || 'https://store.unstablelab.xyz') + '?checkout=success');
+  params.append('cancel_url', (body.cancel_url || 'https://store.unstablelab.xyz') + '/cart.html');
+  params.append('metadata[cart]', JSON.stringify(cartMeta));
+  params.append('metadata[source]', 'cart_checkout');
+
+  for (let i = 0; i < lineItems.length; i++) {
+    params.append(`line_items[${i}][price]`, lineItems[i].price);
+    params.append(`line_items[${i}][quantity]`, lineItems[i].quantity);
+    // Allow quantity adjustment on ranks? No — keep adjustable only for non-rank items
+    const isRank = ['supporter', 'unstable'].includes(items[i].id);
+    if (!isRank) {
+      params.append(`line_items[${i}][adjustable_quantity][enabled]`, 'true');
+      params.append(`line_items[${i}][adjustable_quantity][minimum]`, '1');
+      params.append(`line_items[${i}][adjustable_quantity][maximum]`, '100');
+    }
+  }
+
+  const res = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Basic ' + btoa(env.STRIPE_SECRET_KEY + ':'),
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: params.toString(),
+  });
+
+  const session = await res.json();
+  if (!res.ok) {
+    console.error('Stripe error:', JSON.stringify(session));
+    return corsJson({ error: session.error?.message || 'Stripe error' }, 500);
+  }
+
+  return corsJson({ url: session.url });
+}
+
 // ===== Helpers =====
+function corsHeaders() {
+  return {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+}
+function corsResponse() {
+  return new Response(null, { status: 204, headers: corsHeaders() });
+}
+function corsJson(obj, status = 200) {
+  return new Response(JSON.stringify(obj), {
+    status,
+    headers: { 'content-type': 'application/json', ...corsHeaders() },
+  });
+}
+
 function jsonResponse(obj, status = 200) {
   return new Response(JSON.stringify(obj), {
     status,
