@@ -30,6 +30,10 @@
 
     <div id="cart-items"></div>
 
+    <div id="cart-subtotal" class="cart-subtotal" hidden>
+      Subtotal: <span id="cart-subtotal-value">$0.00</span>
+    </div>
+
     <div id="cart-footer-bar" class="cart-footer-bar" hidden>
       <button id="checkout-all-btn" class="checkout-all-btn" disabled>Checkout All</button>
       <button id="clear-cart-btn" class="clear-cart-btn">Clear Cart</button>
@@ -66,6 +70,9 @@
       emptyEl.hidden = true;
       container.hidden = false;
       footerBar.hidden = false;
+
+      const subtotalEl = document.getElementById('cart-subtotal');
+      subtotalEl.hidden = false;
 
       const hasUser = isValidUsername(STATE.username);
       const checkoutAllBtn = document.getElementById('checkout-all-btn');
@@ -121,6 +128,14 @@
 
         container.appendChild(row);
       }
+
+      // Calculate subtotal
+      let subtotal = 0;
+      for (const item of cart) {
+        const unitPrice = parseFloat(item.price_display.replace('$', ''));
+        subtotal += unitPrice * (item.qty || 1);
+      }
+      document.getElementById('cart-subtotal-value').textContent = '$' + subtotal.toFixed(2);
     }
 
     // Checkout All — sends cart to worker, which creates a Stripe Checkout Session
