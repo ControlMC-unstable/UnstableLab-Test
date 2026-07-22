@@ -19,6 +19,25 @@ body {
   min-height: 100vh;
 }
 
+/* ===== Subtle background glow ===== */
+.bg-glow {
+  position: fixed; inset: 0; z-index: -10; pointer-events: none;
+  overflow: hidden;
+}
+.bg-glow::before {
+  content: "";
+  position: absolute;
+  width: 900px; height: 900px;
+  top: -400px; left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(168,85,247,0.07) 0%, transparent 70%);
+  animation: glow-pulse 8s ease-in-out infinite alternate;
+}
+@keyframes glow-pulse {
+  0% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+  100% { opacity: 1; transform: translateX(-50%) scale(1.15); }
+}
+
 /* ===== Top bar ===== */
 .ip-bar {
   position: sticky; top: 0; z-index: 100;
@@ -88,7 +107,9 @@ header {
   width: 80px; height: 80px;
   margin: 0 auto 24px;
   display: block;
+  transition: transform 0.4s ease;
 }
+.logo:hover { transform: scale(1.08) rotate(-2deg); }
 header h1 {
   font-size: 48px;
   font-weight: 700;
@@ -112,6 +133,10 @@ header p {
   margin: 0 auto 32px;
   display: flex; gap: 14px; align-items: center;
   flex-wrap: wrap;
+  transition: border-color 0.3s;
+}
+.username-card:focus-within {
+  border-color: rgba(168,85,247,0.2);
 }
 .username-card label {
   color: var(--muted); font-size: 11px; font-weight: 600;
@@ -124,14 +149,14 @@ header p {
   border-radius: 8px;
   padding: 10px 14px;
   color: #fff; font: inherit; font-size: 14px; font-weight: 500;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 .username-card input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(168,85,247,0.12);
+  box-shadow: 0 0 0 2px rgba(168,85,247,0.12), 0 0 20px rgba(168,85,247,0.06);
 }
-.username-card .status { font-size: 11px; color: var(--muted); font-weight: 500; }
+.username-card .status { font-size: 11px; color: var(--muted); font-weight: 500; transition: color 0.3s; }
 .username-card .status.saved { color: #34d399; }
 
 .head {
@@ -144,6 +169,7 @@ header p {
   display: grid; place-items: center;
   color: var(--muted); font-size: 18px;
   overflow: hidden;
+  transition: border-color 0.3s;
 }
 .head img {
   width: 100%; height: 100%; display: block;
@@ -164,10 +190,14 @@ header p {
   border-radius: 12px;
   background: var(--surface);
   overflow: hidden;
-  transition: border-color 0.2s;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.section-drop:hover {
+  border-color: rgba(255,255,255,0.08);
 }
 .section-drop.open {
-  border-color: rgba(255,255,255,0.1);
+  border-color: rgba(168,85,247,0.15);
+  box-shadow: 0 4px 32px rgba(168,85,247,0.04);
 }
 
 .section-toggle {
@@ -179,7 +209,7 @@ header p {
   font: inherit; font-weight: 600; font-size: 16px;
   cursor: pointer;
   text-align: left;
-  transition: background 0.15s;
+  transition: background 0.2s;
 }
 .section-toggle:hover {
   background: rgba(255,255,255,0.02);
@@ -187,6 +217,13 @@ header p {
 .section-toggle .icon {
   font-size: 28px; line-height: 1;
   flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+.section-drop:hover .section-toggle .icon {
+  transform: scale(1.1);
+}
+.section-drop.open .section-toggle .icon {
+  transform: scale(1.15);
 }
 .section-toggle .section-info { flex: 1; }
 .section-toggle .section-info span {
@@ -196,26 +233,27 @@ header p {
 }
 .section-toggle .chevron {
   color: var(--muted); font-size: 18px;
-  transition: transform 0.25s ease;
+  transition: transform 0.3s ease, color 0.2s;
   flex-shrink: 0;
 }
 .section-drop.open .chevron {
   transform: rotate(180deg);
+  color: var(--accent);
 }
 
 .section-body {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.35s ease;
+  transition: max-height 0.4s ease;
 }
 .section-drop.open .section-body {
   max-height: 2000px;
 }
 
 .section-products {
-  padding: 0 20px 20px;
+  padding: 4px 20px 20px;
   display: flex; flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 /* ===== Product row ===== */
@@ -227,10 +265,12 @@ header p {
   background: rgba(0,0,0,0.2);
   border: 1px solid var(--border);
   border-radius: 10px;
-  transition: border-color 0.15s;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 .product:hover {
   border-color: rgba(255,255,255,0.1);
+  transform: translateX(4px);
+  box-shadow: -4px 0 0 var(--accent);
 }
 .product-info {
   flex: 1; min-width: 0;
@@ -276,19 +316,23 @@ header p {
   font: inherit; font-weight: 700; font-size: 13px;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.15s;
+  transition: all 0.2s;
 }
 .product button:hover {
   background: var(--accent);
   color: #fff;
+  box-shadow: 0 4px 16px rgba(168,85,247,0.3);
 }
-.product button:active { transform: scale(0.97); }
+.product button:active { transform: scale(0.95); }
 .product button:disabled {
   background: rgba(255,255,255,0.06);
   color: #555;
   cursor: not-allowed;
 }
-.product button:disabled:hover { background: rgba(255,255,255,0.06); color: #555; }
+.product button:disabled:hover {
+  background: rgba(255,255,255,0.06); color: #555;
+  box-shadow: none;
+}
 
 /* ===== Section header (for section.html / terms.html) ===== */
 .section-header { margin-bottom: 28px; text-align: center; padding-top: 40px; }
@@ -305,9 +349,9 @@ header p {
   color: var(--muted); text-decoration: none;
   margin-top: 40px;
   font-weight: 600; font-size: 13px;
-  transition: color 0.2s;
+  transition: color 0.2s, gap 0.2s;
 }
-.back:hover { color: #fff; }
+.back:hover { color: #fff; gap: 10px; }
 
 /* ===== Product grid (section.html fallback) ===== */
 .grid {
@@ -321,9 +365,12 @@ header p {
   border-radius: 14px;
   padding: 24px 22px 22px;
   display: flex; flex-direction: column;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, transform 0.2s;
 }
-.card:hover { border-color: rgba(255,255,255,0.1); }
+.card:hover {
+  border-color: rgba(255,255,255,0.1);
+  transform: translateY(-2px);
+}
 .card h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
 .card .price {
   font-family: 'JetBrains Mono', monospace;
@@ -352,15 +399,18 @@ header p {
   border-radius: 8px;
   font: inherit; font-weight: 700; font-size: 14px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.2s;
 }
-.card button:hover { background: var(--accent); color: #fff; }
+.card button:hover {
+  background: var(--accent); color: #fff;
+  box-shadow: 0 4px 16px rgba(168,85,247,0.3);
+}
 .card button:active { transform: scale(0.98); }
 .card button:disabled {
   background: rgba(255,255,255,0.06); color: #555;
   cursor: not-allowed;
 }
-.card button:disabled:hover { background: rgba(255,255,255,0.06); color: #555; }
+.card button:disabled:hover { background: rgba(255,255,255,0.06); color: #555; box-shadow: none; }
 
 /* ===== Footer ===== */
 footer {

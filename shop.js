@@ -72,7 +72,12 @@ function wireCopyButton(btn, text) {
   document.body.insertBefore(bar, document.body.firstChild);
 })();
 
-// ===== No background effects =====
+// ===== Subtle background glow =====
+(function installBackground() {
+  const glow = document.createElement('div');
+  glow.className = 'bg-glow';
+  document.body.insertBefore(glow, document.body.firstChild);
+})();
 
 function showError(msg) {
   const el = document.getElementById('error');
